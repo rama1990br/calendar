@@ -9,16 +9,32 @@ function myTable() {
         table.appendChild(th);
     }
     //function to display hourly blocks of each day for one week
+    var time = [];
+    $.getJSON('calendar.json', function (data) {
+        $.each(data, function (i, item) {
+            time[i] = item.time.length
+            })
+    })
     for (var i = 0; i < 24; i++) {
+        
         var tr = document.createElement('tr');
         table.appendChild(tr);
+        
         for (var j = 0; j < 7; j++) {
-
-            var td = document.createElement('td');
-            td.innerText = "meeting with hrishi";
-            tr.appendChild(td);
+            if (time[j] == 0) {
+                var td = document.createElement('td');
+                td.innerText = "";
+                tr.appendChild(td);
+            }
+            else {
+                var td = document.createElement('td');
+                td.innerText = "meeting with hrishi";
+                tr.appendChild(td);
+            }
+            
         }
     }
     document.body.appendChild(table);
 }
 myTable();
+
