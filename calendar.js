@@ -10,15 +10,13 @@ function myTable() {
         table.appendChild(th);
     }
     //function to display hourly blocks of each day for one week
-    var time = getLengthsOfTimeArray();
-    
-    updateTable(table,time);
+    getScheduleAndUpdateTable(table);
     
     document.body.appendChild(table);
 }
 myTable();
 
-function getLengthsOfTimeArray()
+function getScheduleAndUpdateTable(table)
 {
     var time = [];
     $.ajax({
@@ -29,11 +27,10 @@ function getLengthsOfTimeArray()
         success: function (data) {
             $.each(data, function (i, item) {
                 time[i] = item.time.length;
-            })
+            });
+            updateTable(table, time);
         }
-    })
-
-    return time;
+    });
 }
 
 function updateTable(table,time)
