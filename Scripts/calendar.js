@@ -23,7 +23,7 @@ function createTable()
         tr.id = i;
         table.appendChild(tr);
         var td = document.createElement('td');
-        td.innerText = i + ":00";
+        td.innerText = i+":00";
         tr.appendChild(td);
         
         for (var j = 1; j < 8; j++) {
@@ -31,8 +31,6 @@ function createTable()
             updateCellWithNoAppointment(td);
             tr.appendChild(td);
         }
-
-
     }
     return table;
 }
@@ -41,7 +39,7 @@ function getScheduleAndUpdateTable(table)
 {
     var time = [];
     $.ajax({
-        url: '/App_Data/calendar.json',
+        url: '../Scripts/calendar.json',
         dataType: 'json',
         type: 'get',
         cache: false,
@@ -63,6 +61,7 @@ function updateTable(table,time)
         {
             var td = tr.getElementsByTagName('td');
             
+            
             if (time[j].length == 0)
             {
                 updateCellWithNoAppointment(td[j+1]);
@@ -76,6 +75,14 @@ function updateTable(table,time)
                     if (time[j][k] == i)
                     {
                         updateCellWithAppointment(td[j+1]);
+                        hourMatchFlag = 1;
+                        //break;
+                    }
+                    if (time[j][k] == i + .30)
+                    {
+                        var div = document.createElement('div');
+                        td[j + 1].appendChild(div);
+                        div.innerText = "meeting with hrishi";
                         hourMatchFlag = 1;
                         break;
                     }
