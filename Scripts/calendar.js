@@ -10,7 +10,7 @@ myTable();
 function createTable()
 {
     var table = document.createElement('table');
-    table.id = "tableId";
+    table.id = "calendar-id";
     var thElements = ['Hour of day', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     for (var k = 0; k < 8; k++) {

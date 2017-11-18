@@ -1,14 +1,17 @@
-﻿#tableId
+﻿#calendar-id
 {
     width: 100%;
 }
 
-#tableId td, #tableId th {
+#calendar-id td,
+#calendar-id th 
+{
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-#tableId th {
+#calendar-id th
+{
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
