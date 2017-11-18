@@ -1,0 +1,21 @@
+﻿#calendar-id
+{
+    width: 100%;
+}
+
+#calendar-id td,
+#calendar-id th 
+{
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#calendar-id th
+{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
