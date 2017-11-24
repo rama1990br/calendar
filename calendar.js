@@ -4,7 +4,7 @@ function myTable() {
     getScheduleAndUpdateTable(table);
     document.body.appendChild(table);
     // myFunction(table);
-    $("#tableId").on('click', 'td', myFunction);
+    $("#calendarId").on('click', 'td', myFunction);
 
 }
 myTable();
@@ -33,7 +33,7 @@ function myFunction() {
 
 function createTable() {
     var table = document.createElement('table');
-    table.id = "tableId";
+    table.id = "calendarId";
 
     var thElements = ['Hour of day', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
