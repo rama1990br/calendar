@@ -3,37 +3,81 @@
 <head>
     <meta charset="utf-8" />
     <title>Google calendar</title>
+    <link rel="shortcut icon" href="C:\Users\rama\workspace\calendar\favicon.ico" /> <!--added this so that we don't get a server side error for the favicon.ico image-->
+    <link rel="stylesheet" href="calendar.css"/>
 </head>
 <body>
     <h1>Your schedule for the week</h1>
-    <div id="calendar"></div>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="./calendar.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!-- Modal -->
-    <div class="modal" id="myModal" role="dialog">
-        <div class="modal-dialog">
+    <dialog id="favDialog">
+  <form method="dialog">
+    <section>
+      <p><label for="eventName">Event Name :</label><input id="eventName" type="text"></p>
+      <p><label for="startTime">Start Time :</label>
+      <select id="startTime">
+        <option id="st0">0:00</option>
+        <option id="st1">1:00</option>
+        <option id="st2">2:00</option>
+        <option id="st3">3:00</option>
+        <option id="st4">4:00</option>
+        <option id="st5">5:00</option>
+        <option id="st6">6:00</option>
+        <option id="st7">7:00</option>
+        <option id="st8">8:00</option>
+        <option id="st9">9:00</option>
+        <option id="st10">10:00</option>
+        <option id="st11">11:00</option>
+        <option id="st12">12:00</option>
+        <option id="st13">13:00</option>
+        <option id="st14">14:00</option>
+        <option id="st15">15:00</option>
+        <option id="st16">16:00</option>
+        <option id="st17">17:00</option>
+        <option id="st18">18:00</option>
+        <option id="st19">19:00</option>
+        <option id="st20">20:00</option>
+        <option id="st21">21:00</option>
+        <option id="st22">22:00</option>
+        <option id="st23">23:00</option>
+      </select></p>
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Details of the event</h4>
-                </div>
-                <div class="modal-body">
-                    <!--<form>-->
-                    <input type="text" name="EventName" placeholder="Event name"><br><br>
-                    <input type="text" name="Location" placeholder="Location">
-                    <!--</form>-->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
+      <p><label for="endTime">End Time :</label>
+      <select id="endTime">
+        <option id="et0">0:00</option>
+        <option id="et1">1:00</option>
+        <option id="et2">2:00</option>
+        <option id="et3">3:00</option>
+        <option id="et4">4:00</option>
+        <option id="et5">5:00</option>
+        <option id="et6">6:00</option>
+        <option id="et7">7:00</option>
+        <option id="et8">8:00</option>
+        <option id="et9">9:00</option>
+        <option id="e10">10:00</option>
+        <option id="et11">11:00</option>
+        <option id="et12">12:00</option>
+        <option id="et13">13:00</option>
+        <option id="et14">14:00</option>
+        <option id="et15">15:00</option>
+        <option id="et16">16:00</option>
+        <option id="et17">17:00</option>
+        <option id="et18">18:00</option>
+        <option id="et19">19:00</option>
+        <option id="et20">20:00</option>
+        <option id="et21">21:00</option>
+        <option id="et22">22:00</option>
+        <option id="et23">23:00</option>
+      </select></p>
+ 
+       <p><label for="locationName">Location :</label><input id="locationName" type="text"></p>
+    </section>
+    <menu>
+      <button id="cancel" type="reset">Cancel</button>
+      <button type="submit">Confirm</button>
+    </menu>
+  </form>
+</dialog>
 
-        </div>
-    </div>
 </body>
 </html>
