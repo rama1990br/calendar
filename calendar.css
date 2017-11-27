@@ -1,21 +1,22 @@
-﻿#calendar-id
-{
+﻿#calendar-id {
     width: 100%;
 }
 
 #calendar-id td,
-#calendar-id th 
-{
+#calendar-id th {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-#calendar-id th
-{
-    padding-top: 12px;
-    padding-bottom: 12px;
+#calendar-id th {
+    padding-top: 12px 0;
     text-align: left;
     background-color: #4CAF50;
     color: white;
+}
+/* The following class has been added to reduce the height of the modal element. Otherwise, the modal element 
+	covers the entire table area which is not desirable. */
+.modal-height {
+	height: 240px;
 }
 

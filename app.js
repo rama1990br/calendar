@@ -3,8 +3,15 @@ var fs = require('fs');
 var path = require('path')
 const PORT = 3000;
 http.createServer(function (request, response) {
+    
+if (request.url === '/favicon.ico') {           //code to handle favicon.ico image
+    response.writeHead(200, {'Content-Type': 'image/x-icon'} );
+    response.end();
+    }
+
     var filePath = request.url === '/' ? 'index.html' : request.url;
     var extName;
+
     function getContentType(extName) {
         switch (extName) {
             case 'css': return 'text/css';
@@ -19,7 +26,8 @@ http.createServer(function (request, response) {
     }
     else {
         extName = filePath.split('.')[1];
-    }        
+    }
+    
     fs.readFile('./' + filePath.split('?')[0], function (error, content) {
        if (error) {
                 throw error;
@@ -29,7 +37,7 @@ http.createServer(function (request, response) {
                 response.end(content, 'utf-8');
             }
         });
-
+      
    
     }
 

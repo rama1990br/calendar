@@ -3,38 +3,36 @@ function myTable() {
     var table = createTable();
     getScheduleAndUpdateTable(table);
     document.body.appendChild(table);
-    // myFunction(table);
-    $("#calendarId").on('click', 'td', myFunction);
-
 }
 myTable();
+$("#calendar-id").on('click', 'tr', displayModal);
 
-function myFunction() {
-    var modal = $('#myModal');
-    modal.css('display', 'block');
-    var span = $('.close');
-    var closebtn = $('.btn.btn-default');
-
-    var closefn = function () {
-        modal.css('display', 'none');
-    }
-    span.click(closefn);
-    closebtn.click(closefn);
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.css('display', 'none');
-        }
-    }
+//cancelModal is defined outside displayModal cause otherwise, it's entry is made in the event handler table each time it is 
+//encountered in the displayModal method and therefore is called multiple times on each cancel button click. 
+function cancelModal(){
+    $("#favDialog")[0].close();
 }
 
-//function to create the skeleton of the calendar
+function displayModal() {
+ var startTime = this.innerText;
+  
+  $("#favDialog")[0].showModal(); //showModal function can be applied only to a HTMLDialogMethod and not to a jQuery object, therefore $("#favDialog")[0]
+  
+ 
+  $("#startTime option").each(function() {   
+        if(startTime.includes(this.value)){
+            $("#"+this.id).attr("selected","selected");
+        }
+  });
+  // Form cancel button closes the dialog box
+  $("#cancel").click(cancelModal); 
+}
 
+
+//function to create the skeleton of the calendar
 function createTable() {
     var table = document.createElement('table');
-    table.id = "calendarId";
-
+    table.id = "calendar-id";
     var thElements = ['Hour of day', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     for (var k = 0; k < 8; k++) {
@@ -52,12 +50,9 @@ function createTable() {
 
         for (var j = 1; j < 8; j++) {
             var td = document.createElement('td');
-            // td.id = i.toString() + j.toString();
             updateCellWithNoAppointment(td);
             tr.appendChild(td);
         }
-
-
     }
     return table;
 }
@@ -85,7 +80,6 @@ function updateTable(table, time) {
 
             if (time[j].length == 0) {
                 updateCellWithNoAppointment(td[j + 1]);
-
             }
             else {
                 var hourMatchFlag = 0;
