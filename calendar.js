@@ -5,30 +5,32 @@ function myTable() {
     document.body.appendChild(table);
 }
 myTable();
-$("#calendar-id").on('click', 'tr', myFunction);
+$("#calendar-id").on('click', 'tr', displayModal);
 
+//cancelModal is defined outside displayModal cause otherwise, it's entry is made in the event handler table each time it is 
+//encountered in the displayModal method and therefore is called multiple times on each cancel button click. 
+function cancelModal(){
+    $("#favDialog")[0].close();
+}
 
-function myFunction() {
- // var updateButton = document.getElementById('updateDetails');
-  var cancelButton = document.getElementById('cancel');
-  var favDialog = document.getElementById('favDialog');
-  var startTime = this.innerText;
+function displayModal() {
+ var startTime = this.innerText;
   
-  favDialog.showModal();
+  //$("#favDialog")[0].open=true;
+  $("#favDialog")[0].showModal(); //showModal function can be applied only to a HTMLDialogMethod and not to a jQuery object, therefore $("#favDialog")[0]
+  
  
-  $("#startTime option").each(function(i) {   
+  $("#startTime option").each(function() {   
         if(startTime.includes(this.value)){
             $("#"+this.id).attr("selected","selected");
         }
   });
   // Form cancel button closes the dialog box
-  cancelButton.addEventListener('click', function() {
-  favDialog.close();
-  });
+  $("#cancel").click(cancelModal); 
 }
 
-//function to create the skeleton of the calendar
 
+//function to create the skeleton of the calendar
 function createTable() {
     var table = document.createElement('table');
     table.id = "calendar-id";

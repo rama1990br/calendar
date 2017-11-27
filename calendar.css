@@ -12,13 +12,14 @@
 
 #calendar-id th
 {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 12px 0;
     text-align: left;
     background-color: #4CAF50;
     color: white;
 }
-.modal-height
+/* The following class has been added to reduce the height of the modal element. Otherwise, the modal element 
+	covers the entire table area which is not desirable. */
+.modal-height    
 {
 	height:240px;
 }
