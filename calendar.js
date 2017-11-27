@@ -16,7 +16,6 @@ function cancelModal(){
 function displayModal() {
  var startTime = this.innerText;
   
-  //$("#favDialog")[0].open=true;
   $("#favDialog")[0].showModal(); //showModal function can be applied only to a HTMLDialogMethod and not to a jQuery object, therefore $("#favDialog")[0]
   
  

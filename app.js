@@ -13,7 +13,6 @@ if (request.url === '/favicon.ico') {           //code to handle favicon.ico ima
     var extName;
 
     function getContentType(extName) {
-        //console.log(extName);
         switch (extName) {
             case 'css': return 'text/css';
             case 'json': return 'application/json';
@@ -28,9 +27,7 @@ if (request.url === '/favicon.ico') {           //code to handle favicon.ico ima
     else {
         extName = filePath.split('.')[1];
     }
-    // app.get('/favicon.ico', function(req, res) {
-    //     res.status(204);
-    // });
+    
     fs.readFile('./' + filePath.split('?')[0], function (error, content) {
        if (error) {
                 throw error;
