@@ -10,7 +10,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="./calendar.js"></script>
     <dialog id="favDialog">
-  <form method="dialog">
+  <form method="post">
     <section>
       <p><label for="eventName">Event Name :</label><input id="eventName" type="text"></p>
       <p><label for="startTime">Start Time :</label>
@@ -73,7 +73,7 @@
     </section>
     <menu>
       <button id="cancel" type="reset">Cancel</button>
-      <button type="submit">Confirm</button>
+      <button id="confirm" type="submit">Confirm</button>
     </menu>
   </form>
 </dialog>
