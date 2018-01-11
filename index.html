@@ -4,13 +4,15 @@
     <meta charset="utf-8" />
     <title>Google calendar</title>
     <link rel="stylesheet" href="calendar.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="dialog-polyfill.css" />-->
 </head>
 <body>
     <h1>Your schedule for the week</h1>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <!--<script src="dialog-polyfill.js"></script>-->
     <script src="./calendar.js"></script>
     <dialog id="favDialog">
-  <form method="dialog">
+  <form method="post">
     <section>
       <p><label for="eventName">Event Name :</label><input id="eventName" type="text"></p>
       <p><label for="startTime">Start Time :</label>
@@ -73,7 +75,7 @@
     </section>
     <menu>
       <button id="cancel" type="reset">Cancel</button>
-      <button type="submit">Confirm</button>
+      <button id="confirm" type="submit">Confirm</button>
     </menu>
   </form>
 </dialog>
