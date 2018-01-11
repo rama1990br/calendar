@@ -15,16 +15,22 @@ function cancelModal() {
 }
 
 function getSelectedDate(todaysDate, dayOfWeekNumber) {
+    var NUMBER_OF_HOURS_IN_DAY = 24;
     var diffInNumberOfDays = todaysDate.getDay() - dayOfWeekNumber;
-    todaysDate.setHours(-24 * diffInNumberOfDays);
-    return todaysDate;
+    var selectedDate = todaysDate.setHours(-NUMBER_OF_HOURS_IN_DAY * diffInNumberOfDays);
+    return selectedDate;
 }
+
+function formatDateTimeToEpoch(date, time) {
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var dateInDateTime = new Date(date);
+    return new Date(monthNames[dateInDateTime.getMonth()] + " " + dateInDateTime.getDate() + ", " + dateInDateTime.getFullYear() + " " + time + ":00").getTime()/1000.0;
+}
+
 function confirmModal(event) {
-    var selectedDate = getSelectedDate(new Date(), event.data.param1);
-    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var epochStartTimeOfEvent = (new Date(monthNames[selectedDate.getMonth()] + " " + selectedDate.getDate() + ", " + selectedDate.getFullYear() + " " + $("#startTime option:selected").text() + ":00")).getTime()/1000.0;
-    var epochEndTimeOfEvent = (new Date(monthNames[selectedDate.getMonth()] + " " + selectedDate.getDate() + ", " + selectedDate.getFullYear() + " " + $("#endTime option:selected").text() + ":00")).getTime()/1000.0;
+    var selectedDate = getSelectedDate(new Date(), event.data.clickedColumnIndex);
+    var epochStartTimeOfEvent = formatDateTimeToEpoch(selectedDate, $("#startTime option:selected").text());
+    var epochEndTimeOfEvent = formatDateTimeToEpoch(selectedDate, $("#endTime option:selected").text());
     var sendInfo = {
         eventName: $("#eventName").val(),
         startTime: epochStartTimeOfEvent,
@@ -45,23 +51,32 @@ function confirmModal(event) {
 }
 
 function displayModal() {
-    var selectedStartTime = this.parentNode.innerText;
-    var param1;
+    var selectedStartTime = $('td:first', $(this).parents('tr')).text();
+    var clickedColumnIndex;
     $('#favDialog')[0].showModal(); //showModal function can be applied only to a HTMLDialogMethod and not to a jQuery object, therefore $("#favDialog")[0]
     $("#startTime option").each(function() {   
-        if(selectedStartTime.includes(this.value)) {
-            $("#" + this.id).attr("selected","selected");
+        if(selectedStartTime === $(this).val()) {
+            $("#" + $(this).attr('id')).attr("selected","selected");
+            return false;
         }
     });
+
     // Form cancel button closes the dialog box
     $("#cancel").click(cancelModal); 
-    $("#confirm").click({param1: parseInt( $(this).index() - 1)}, confirmModal);
+    $("#confirm").click({clickedColumnIndex: parseInt( $(this).index() - 1)}, confirmModal);
 }
 
 
 //function to create the skeleton of the calendar
 function createTable() {
-    var table, thElements, k, th, i, tr, td, j;
+    var table, 
+      thElements, 
+      k, 
+      th, 
+      i, 
+      tr, 
+      td, 
+      j;
     table = document.createElement('table');
     table.id = "calendar-id";
     thElements = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -101,15 +116,26 @@ function getScheduleAndUpdateTable(table) {
         }   
     });
 }
+
+function getEventStartDay(startTime, locale){
+    return (new Date(startTime * 1000)).toLocaleString(locale, {weekday: 'short'});
+}
+
 //function to update the table according to the booked appointments
 function updateTable(table, data) {
-    var eventName, startRow, startTimeDay, locationName, startTimeHour, endTimeHour;
+    var locale = 'en-US',
+      eventName, 
+      startRow, 
+      startTimeDay, 
+      locationName, 
+      startTimeHour, 
+      endTimeHour;
     $.each(data, function (i, item) {
         eventName = item.eventName;
         locationName = item.locationName;
-        startTimeDay = (new Date(item.startTime * 1000)).toLocaleString('en-US', {weekday: 'short'});
-        startTimeHour = (new Date(item.startTime * 1000)).toLocaleString().split(' ')[2] == 'AM' ? (new Date(item.startTime * 1000)).toLocaleString().split(' ')[1].split(':')[0] : parseInt((new Date(item.startTime * 1000)).toLocaleString().split(' ')[1].split(':')[0]) + 12;
-        endTimeHour = (new Date(item.endTime * 1000)).toLocaleString().split(' ')[2] == 'AM' ? (new Date(item.endTime * 1000)).toLocaleString().split(' ')[1].split(':')[0] : parseInt((new Date(item.endTime * 1000)).toLocaleString().split(' ')[1].split(':')[0]) + 12;
+        startTimeDay = getEventStartDay(item.startTime, locale);
+        startTimeHour = (new Date(item.startTime * 1000)).getHours();
+        endTimeHour = (new Date(item.endTime * 1000)).getHours();
         startRow = document.getElementById(startTimeHour);
         numberOfHours = endTimeHour - startTimeHour;
         $.each(startRow.childNodes, function(j, item) {
