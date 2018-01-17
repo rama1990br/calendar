@@ -3,7 +3,6 @@ var fs = require('fs');
 var path = require('path');
 var mysql = require('mysql');
 var db = require('./db_functions.js');
-
 const PORT = 3000;
 
 var con = mysql.createConnection({
@@ -54,19 +53,33 @@ http.createServer(function(request, response) {
     else {
         extName = filePath.split('.')[1];
     }
-    
-    if(request.url.includes('/getjsonresponse') && request.method === 'GET') {
-        var result;
-        db.data.retrieveEvent(con, dbCallbackRetrieveEvent);
-        function dbCallbackRetrieveEvent(err, rows) {
+    if(request.url.includes('/appointments')) {
+        var query = require('url').parse(request.url,true).query;
+
+        db.data.retrieveWeeklyEvent(con, query, dbCallbackWeeklyRetrieveEvent);
+        function dbCallbackWeeklyRetrieveEvent(err, rows) {
             if (err) {
                 throw err;
             } 
-            console.log('Data received from Db:\n');
+            console.log('Weekly data received from Db:\n' + rows);
             response.writeHead(200, { 'Content-Type': 'application/json' });
             response.end(JSON.stringify(rows), 'utf-8');
         }
+
+        
     }
+    //else if(request.url.includes('/getjsonresponse') && request.method === 'GET') {
+     //   var result;
+       // db.data.retrieveEvent(con, dbCallbackRetrieveEvent);
+        //function dbCallbackRetrieveEvent(err, rows) {
+          //  if (err) {
+            //    throw err;
+           // } 
+            //console.log('Data received from Db:\n');
+            //response.writeHead(200, { 'Content-Type': 'application/json' });
+            //response.end(JSON.stringify(rows), 'utf-8');
+        //}
+    //}
     else {
         fs.readFile('./' + filePath.split('?')[0], function (error, content) {
             if (error) {
