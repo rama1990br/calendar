@@ -1,0 +1,38 @@
+#!/bin/sh
+
+echo "Starting pre-commit...\n"
+
+files=$(git diff --cached --name-only | grep ".js$")
+
+if [ "$2" = "-n" ]; then
+    echo "Skipping pre-commit...\n"
+    exit 0
+fi
+
+if [ "$files" = "" ]; then
+    exit 0
+fi
+
+pass=true
+
+echo "\nValidating JavaScript:\n"
+
+for file in ${files}; do
+    result=$(eslint ${file})
+    if [ "$?" eq 0 ]; then
+        echo "ESLint Passed: ${file}"
+    else
+        echo "ESLint Failed: ${file}"
+        echo "$result"
+        pass=false
+    fi
+done
+
+echo "\nJavaScript validation complete\n"
+
+if ! $pass; then
+    echo "Your commit contains files that should pass ESLint but do not. Please fix the ESLint errors and try again.\n"
+    exit 1
+else
+    echo "COMMIT SUCCEEDED \n"
+fi
