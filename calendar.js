@@ -1,94 +1,33 @@
-// function to display the table
-function myTable() {
-  var table = createTable();
-  getScheduleAndUpdateTable(table);
-  document.body.appendChild(table);
-}
-myTable();
-
-$('#calendar-id').on('click', 'td', displayModal);
-
-// cancelModal is defined outside displayModal cause otherwise, it's entry is made in the event handler table each time it is
-// encountered in the displayModal method and therefore is called multiple times on each cancel button click.
-function cancelModal() {
-  $('#favDialog')[0].close();
-}
-
-function getSelectedDate(todaysDate, dayOfWeekNumber) {
-  var NUMBER_OF_HOURS_IN_DAY = 24
-  var diffInNumberOfDays = todaysDate.getDay() - dayOfWeekNumber;
-  var selectedDate = todaysDate.setHours(-NUMBER_OF_HOURS_IN_DAY * diffInNumberOfDays);
-  return selectedDate;
-}
-
-function formatDateTimeToEpoch(date, time) {
-  var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  var dateInDateTime = new Date(date);
-  return new Date(monthNames[dateInDateTime.getMonth()] + ' ' + dateInDateTime.getDate() + ', ' + dateInDateTime.getFullYear() + ' ' + time + ':00').getTime() / 1000.0;
-}
-
-function confirmModal(event) {
-  var selectedDate = getSelectedDate(new Date(), event.data.clickedColumnIndex);
-  var epochStartTimeOfEvent = formatDateTimeToEpoch(selectedDate, $('#startTime option:selected').text());
-  var epochEndTimeOfEvent = formatDateTimeToEpoch(selectedDate, $('#endTime option:selected').text());
-  var sendInfo = {
-    eventName: $('#eventName').val(),
-    startTime: epochStartTimeOfEvent,
-    endTime: epochEndTimeOfEvent,
-    locationName: $('#locationName').val(),
-  };
-
-  $.ajax({
-    url: '/',
-    method: 'POST',
-    data: JSON.stringify(sendInfo),
-    cache: false,
-    success: function(data) {
-      console.log('done!');
-    },
-  });
-  myTable();
-}
-
-function displayModal() {
-  var selectedStartTime = $('td:first', $(this).parents('tr')).text();
-  var clickedColumnIndex;
-  $('#favDialog')[0].showModal(); // showModal function can be applied only to a HTMLDialogMethod and not to a jQuery object, therefore $("#favDialog")[0]
-  $('#startTime option').each(function() {
-    if (selectedStartTime === $(this).val()) {
-      $('#' + $(this).attr('id')).attr('selected', 'selected');
-      return false;
-    }
-  });
-
-  // Form cancel button closes the dialog box
-  $('#cancel').click(cancelModal);
-  $('#confirm').click({clickedColumnIndex: parseInt( $(this).index() - 1)}, confirmModal);
-}
-
-
-// function to create the skevaron of the calendar
-function createTable() {
+// function to create the skeleton of the calendar
+function createCalendarView(id, fromDate) {
   var table,
     thElements,
-    k,
     th,
     i,
     tr,
-    td,
-    j;
-  table = document.createElement('table');
-  table.id = 'calendar-id';
-  thElements = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  th = document.createElement('th');
-  th.innerText = 'Hour of day';
-  table.appendChild(th);
-  thElements.forEach(function(day, i) {
+    td;
+
+  function createTableHeader(day) {
     th = document.createElement('th');
     th.id = i + day;
     th.innerText = day;
     table.appendChild(th);
-  });
+  }
+
+  function createTableCell(day) {
+    td = document.createElement('td');
+    td.id = day + i;
+    tr.appendChild(td);
+  }
+
+  table = document.createElement('table');
+  table.id = id;
+  table.dataset.sundayepochtime = fromDate;
+  thElements = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  th = document.createElement('th');
+  th.innerText = 'Hour of day';
+  table.appendChild(th);
+  thElements.forEach(createTableHeader);
 
   for (i = 0; i < 24; i++) {
     tr = document.createElement('tr');
@@ -97,32 +36,14 @@ function createTable() {
     td = document.createElement('td');
     td.innerText = i + ':00';
     tr.appendChild(td);
-    thElements.forEach(function(day, j) {
-      td = document.createElement('td');
-      td.id = day + i;
-      tr.appendChild(td);
-    });
+    thElements.forEach(createTableCell);
   }
   return table;
 }
-// function which makes an ajax call to get the values from the json file which contains the hours for which appointments have been booked
-function getScheduleAndUpdateTable(table) {
-  $.ajax({
-    url: '/getjsonresponse',
-    type: 'get',
-    cache: false,
-    success: function(data) {
-      updateTable(table, data);
-    },
-  });
-}
 
-function getEventStartDay(startTime, locale) {
-  return (new Date(startTime * 1000)).toLocaleString(locale, {weekday: 'short'});
-}
 
 // function to update the table according to the booked appointments
-function updateTable(table, data) {
+function updateCalendar(table, data) {
   var locale = 'en-US',
     eventName,
     startRow,
@@ -130,19 +51,257 @@ function updateTable(table, data) {
     locationName,
     startTimeHour,
     endTimeHour;
-  $.each(data, function(i, item) {
+  $.each(data, function displayAppointments(i, item) {
     eventName = item.eventName;
     locationName = item.locationName;
-    startTimeDay = getEventStartDay(item.startTime, locale);
-    startTimeHour = (new Date(item.startTime * 1000)).getHours();
-    endTimeHour = (new Date(item.endTime * 1000)).getHours();
+    startTimeDay = getDayOfWeekInShortStringFormat(item.startTime, locale);
+    startTimeHour = getHour(item.startTime);
+    endTimeHour = getHour(item.endTime);
     startRow = document.getElementById(startTimeHour);
     numberOfHours = endTimeHour - startTimeHour;
-    $.each(startRow.childNodes, function(j, item) {
-      if (item.id.includes(startTimeDay)) {
-        $('#' + item.id).attr('rowspan', endTimeHour - startTimeHour + 1);
-        $('#' + item.id).text(eventName + ' at ' + locationName);
+    $.each(startRow.childNodes, function displayParticularAppointment(j, eachAppointment) {
+      var eventButton = document.createElement('button'),
+        cell = document.getElementById(eachAppointment.id),
+        count;
+      if (eachAppointment.id !== '') {
+        count = $('#' + eachAppointment.id).children().length;
+      }
+      if (eachAppointment.id.includes(startTimeDay)) {
+        eventButton.type = 'button';
+        eventButton.id = eachAppointment.id + 'Appointment' + parseInt(count + 1, 10);
+        eventButton.innerHTML = eventName + ' at ' + locationName;
+        eventButton.dataset.eventName = eventName;
+        eventButton.dataset.startTime = item.startTime;
+        eventButton.dataset.endTime = item.endTime;
+        eventButton.dataset.locationName = locationName;
+        cell.appendChild(eventButton);
       }
     });
   });
 }
+
+function clearPrevValuesInModal() {
+  $('#dialog input').val('');
+  $('#dialog option[selected="selected"]').removeAttr('selected');
+}
+
+function getNumberFromString(stringInput) {
+  return parseInt(stringInput, 10);
+}
+
+function deleteAppointment(event) {
+  var retVal = true;
+  if ( retVal === true ) {
+    $.ajax({
+      url: '/deleteAppointment',
+      method: 'POST',
+      data: JSON.stringify(event.data.value),
+      cache: false,
+      success: function deleteSelectedAppointment() {
+        $('#dialog').dialog('close');
+        // displayCalendar();
+      },
+    });
+  }
+}
+
+function confirmModal(event) {
+  var table = document.getElementById('calendar-id'),
+    epochTime = getNumberFromString(table.dataset.sundayepochtime),
+    clickedIndex = event.data.clickedColumnIndex,
+    startTimeValue = $('#startTime option:selected').text(),
+    endTimeValue = $('#endTime option:selected').text(),
+    epochStartTimeOfEvent = getSelectedDateInCurrentWeek(convertEpochToDateTime(epochTime), clickedIndex, startTimeValue),
+    epochEndTimeOfEvent = getSelectedDateInCurrentWeek(convertEpochToDateTime(epochTime), clickedIndex, endTimeValue),
+    sendInfo = {
+      eventName: $('#eventName').val(),
+      startTime: epochStartTimeOfEvent,
+      endTime: epochEndTimeOfEvent,
+      locationName: $('#locationName').val(),
+    },
+    bookedEventArray = [sendInfo];
+
+  event.preventDefault();
+  $.ajax({
+    url: '/',
+    method: 'POST',
+    data: JSON.stringify(sendInfo),
+    cache: false,
+    success: function postNewAppointment() {
+      $('#dialog').dialog('close');
+      updateCalendar(table, bookedEventArray);
+    },
+  });
+}
+
+function removePreviousAppointment(table, previousEvent) {
+  startTimeDay = getDayOfWeekInShortStringFormat(getNumberFromString(previousEvent.startTime), 'en-US');
+  startTimeHour = getHour(getNumberFromString(previousEvent.startTime));
+  endTimeHour = getHour(getNumberFromString(previousEvent.endTime));
+  startRow = document.getElementById(startTimeHour);
+  numberOfHours = endTimeHour - startTimeHour;
+  $.each(startRow.childNodes, function displayParticularAppointment(j, eachAppointment) {
+    var cell = document.getElementById(eachAppointment.id);
+    if (eachAppointment.id.includes(startTimeDay)) {
+      cell.removeChild(document.getElementById(eachAppointment.id + 'Appointment1'));
+    }
+  });
+}
+
+function editModal(event) {
+  var table = document.getElementById('calendar-id'),
+    epochTime = getNumberFromString(table.dataset.sundayepochtime),
+    clickedIndex = event.data.clickedColumnIndex,
+    startTimeValue = $('#startTime option:selected').text(),
+    endTimeValue = $('#endTime option:selected').text(),
+    epochStartTimeOfEvent = getSelectedDateInCurrentWeek(convertEpochToDateTime(epochTime), clickedIndex, startTimeValue),
+    epochEndTimeOfEvent = getSelectedDateInCurrentWeek(convertEpochToDateTime(epochTime), clickedIndex, endTimeValue),
+    sendInfo = {
+      eventName: $('#eventName').val(),
+      startTime: epochStartTimeOfEvent,
+      endTime: epochEndTimeOfEvent,
+      locationName: $('#locationName').val(),
+      previousEvent: event.data.value.startTime,
+    },
+    previousEvent = event.data.value,
+    bookedEventArray = [sendInfo];
+  event.preventDefault();
+  $.ajax({
+    url: '/editAppointment',
+    method: 'POST',
+    data: JSON.stringify(sendInfo),
+    cache: false,
+    success: function editAppointment() {
+      $('#dialog').dialog('close');
+      removePreviousAppointment(table, previousEvent);
+      updateCalendar(table, bookedEventArray);
+    },
+  });
+}
+
+
+// cancelModal is defined outside displayModal cause otherwise, it's entry is made in the event handler table each time it is
+// encountered in the displayModal method and therefore is called multiple times on each cancel button click.
+function cancelModal() {
+  $('#dialog').dialog('close');
+}
+function displayModal(evt) {
+  var startTime,
+    deleteInfo,
+    regexInt = /\d+/,
+    $dialog = $('#dialog');
+  clearPrevValuesInModal();
+  $dialog.dialog({autoOpen: false});
+  $dialog.dialog('open');
+  function populateModal(eventName, eventStartTime, eventEndTime, locationName, cancelButtonText) {
+    $('#eventName').val(eventName);
+    $('#st' + startTime).attr('selected', 'selected');
+    $('#et' + endTime).attr('selected', 'selected');
+    $('#locationName').val(locationName);
+    $('#cancelOrDelete').text(cancelButtonText);
+  }
+  if (evt.target.tagName === 'BUTTON') {
+    deleteInfo = {
+      eventName: evt.target.dataset.eventName,
+      startTime: evt.target.dataset.startTime,
+      endTime: evt.target.dataset.endTime,
+      locationName: evt.target.dataset.locationName,
+    };
+    populateModal(deleteInfo.eventName, getHour(getNumberFromString(deleteInfo.startTime)), getHour(getNumberFromString(deleteInfo.endTime)), deleteInfo.locationName, 'Delete');
+    $('#cancelOrDelete').on('click', { value: deleteInfo }, deleteAppointment);
+    $('#confirm').click({clickedColumnIndex: parseInt( $(this).index() - 1, 10), value: deleteInfo }, editModal);
+  } else {
+    hour = evt.target.id.match(regexInt);
+    startTime = hour ? parseInt(hour[0], 10) : 0;
+    $('#st' + startTime).attr('selected', 'selected');
+    $('#cancelOrDelete').text('Cancel');
+    $('#cancelOrDelete').click(cancelModal);
+    $('#confirm').click({clickedColumnIndex: parseInt( $(this).index() - 1, 10)}, confirmModal);
+  }
+}
+
+
+function addListenerToCellClick(table) {
+  $('#' + table.id + ' td').click(displayModal);
+}
+
+
+function getScheduleAndupdateCalendar(table, fromDate, toDate) {
+  $.ajax({
+    url: '/appointments',
+    data: {
+      'fromDate': fromDate,
+      'toDate': toDate,
+    },
+    type: 'get',
+    cache: false,
+    success: function getParticularAppointments(data) {
+      updateCalendar(table, data);
+    },
+  });
+}
+
+
+function addListenersToPrevAndNextLinks() {
+  var calendarElement = document.getElementById('calendar-id'),
+    sundayOfCurrentWeek =  (calendarElement !== null) ? getNumberFromString(calendarElement.dataset.sundayepochtime) : undefined;
+  function createNewWeekViewAndUpdateAppointments(requiredWeeksSunday, requiredWeeksSaturday) {
+    var table;
+    document.body.removeChild(calendarElement);
+    table = createCalendarView('calendar-id', requiredWeeksSunday, requiredWeeksSaturday);
+    document.body.appendChild(table);
+    addListenerToCellClick(table);
+    getScheduleAndupdateCalendar(table, requiredWeeksSunday, requiredWeeksSaturday);
+  }
+  function getPreviousAppointments() {
+    var previousSunday = getSundayOfPreviousWeek(sundayOfCurrentWeek),
+      previousSaturday = getSaturdayOfPreviousWeek(sundayOfCurrentWeek);
+    createNewWeekViewAndUpdateAppointments(previousSunday, previousSaturday);
+  }
+  function getNextAppointments() {
+    var nextSunday = getSundayOfNextWeek(sundayOfCurrentWeek),
+      nextSaturday = getSaturdayOfNextWeek(sundayOfCurrentWeek);
+    createNewWeekViewAndUpdateAppointments(nextSunday, nextSaturday);
+  }
+  $('#prevButton').click(getPreviousAppointments);
+  $('#nextButton').click(getNextAppointments);
+}
+
+function createPrevAndNextLinks() {
+  function createButton(buttonId, buttonText, appendChildTo) {
+    var button = document.createElement('button');
+    button.id = buttonId;
+    button.innerHTML = buttonText;
+    appendChildTo.appendChild(button);
+  }
+  createButton('prevButton', '<', document.body);
+  createButton('nextButton', '>', document.body);
+  addListenersToPrevAndNextLinks();
+}
+
+
+function removeExistingWeekView(calendarElement) {
+  document.body.removeChild(document.getElementById('prevButton'));
+  document.body.removeChild(document.getElementById('nextButton'));
+  document.body.removeChild(calendarElement);
+}
+
+
+function displayCalendar() {
+  var table,
+    calendarElement = document.getElementById('calendar-id'),
+    sundayEpochTime = (calendarElement !== null) ? getNumberFromString(calendarElement.dataset.sundayepochtime) : undefined;
+  createPrevAndNextLinks();
+  if (sundayEpochTime !== undefined) { // if the current week view is being displayed, sundayEpochTime isn't set as yet. If previous or next week views are to be displayed, sundayEpochTime is set.
+    removeExistingWeekView(calendarElement);
+    table = createCalendarView('calendar-id', sundayEpochTime);
+    getScheduleAndupdateCalendar(table, sundayEpochTime, getSaturdayOfCurrentWeek(convertEpochToDateTime(sundayEpochTime)));
+  } else {
+    table = createCalendarView('calendar-id', getSundayOfCurrentWeek(new Date()));
+    getScheduleAndupdateCalendar(table, getSundayOfCurrentWeek(new Date()), getSaturdayOfCurrentWeek(new Date()));
+  }
+  document.body.appendChild(table);
+  addListenerToCellClick(table);
+}
+
+displayCalendar();

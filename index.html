@@ -1,17 +1,23 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>Google calendar</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="calendar.css"/>
-    <!--<link rel="stylesheet" type="text/css" href="dialog-polyfill.css" />-->
 </head>
 <body>
-    <h1>Your schedule for the week</h1>
+
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    <!--<script src="dialog-polyfill.js"></script>-->
+   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
+    <script src="./Date.js"></script>
+
     <script src="./calendar.js"></script>
-    <dialog id="favDialog">
+    <!--<dialog id="favDialog">-->
+        <!--<button id="opener">open the dialog</button>-->
+        <div id="dialog" style="display:none;" title="Dialog Title">
   <form method="post">
     <section>
       <p><label for="eventName">Event Name :</label><input id="eventName" type="text"></p>
@@ -70,15 +76,16 @@
         <option id="et22">22:00</option>
         <option id="et23">23:00</option>
       </select></p>
- 
+
        <p><label for="locationName">Location :</label><input id="locationName" type="text"></p>
     </section>
     <menu>
-      <button id="cancel" type="reset">Cancel</button>
+      <button id="cancelOrDelete" type="reset"></button>
       <button id="confirm" type="submit">Confirm</button>
     </menu>
   </form>
-</dialog>
+ </div>
+<!--</dialog>-->
 
 </body>
 </html>
