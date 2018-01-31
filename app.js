@@ -1,9 +1,9 @@
-var http = require('http');
-var fs = require('fs');
-var path = require('path');
-var mysql = require('mysql');
-var db = require('./db_functions.js');
-var PORT = 3000;
+var http = require('http'),
+  fs = require('fs'),
+  path = require('path'),
+  mysql = require('mysql'),
+  db = require('./db_functions.js'),
+  PORT = 3000;
 
 var con = mysql.createConnection({
   host: 'localhost',
@@ -18,6 +18,13 @@ function dbCallbackAddEvent(err, result) {
   // console.log("1 record inserted");
 }
 
+function dbCallbackEditEvent(err, result) {
+  if (err) {
+    throw err;
+  }
+  // console.log("1 record inserted");
+}
+
 function dbCallbackDeleteEvent(err, result) {
   if (err) {
     throw err;
@@ -25,20 +32,12 @@ function dbCallbackDeleteEvent(err, result) {
   // console.log("1 record deleted");
 }
 
-function dbCallbackWeeklyRetrieveEvent(err, rows) {
-  if (err) {
-    throw err;
-  }
-  // console.log('Weekly data received from Db:\n' + rows);
-  response.writeHead(200, { 'Content-Type': 'application/json' });
-  response.end(JSON.stringify(rows), 'utf-8');
-}
 
 http.createServer(function processRequest(request, response) {
-  var body = '';
-  var filePath = request.url === '/' ? 'index.html' : request.url;
-  var extName;
-  var query;
+  var body = '',
+    filePath = request.url === '/' ? 'index.html' : request.url,
+    extName,
+    query;
   if (request.url === '/favicon.ico') {           // code to handle favicon.ico image
     response.writeHead(200, {'Content-Type': 'image/x-icon'});
     response.end();
@@ -53,6 +52,15 @@ http.createServer(function processRequest(request, response) {
       db.data.addEvent(con, body, dbCallbackAddEvent);
     });
   }
+  if (request.method === 'POST' && request.url === '/editAppointment') {
+    request.on('data', function editEvent(data) {
+      body = JSON.parse(data);
+      if (body.length > 1e6) {
+        request.connection.destroy();
+      }
+      db.data.editEvent(con, body, dbCallbackEditEvent);
+    });
+  }
   if (request.method === 'POST' && request.url === '/deleteAppointment') {
     request.on('data', function deleteEvent(data) {
       body = JSON.parse(data);
@@ -60,6 +68,14 @@ http.createServer(function processRequest(request, response) {
         request.connection.destroy();
       }
       db.data.deleteEvent(con, body, dbCallbackDeleteEvent);
+    });
+    fs.readFile('./index.html', function readContents(error, content) {
+      if (error) {
+        throw error;
+      } else {
+        response.writeHead(200, { 'Content-Type': 'text/html' });
+        response.end(content, 'utf-8');
+      }
     });
   }
 
@@ -77,10 +93,19 @@ http.createServer(function processRequest(request, response) {
   } else {
     extName = filePath.split('.')[1];
   }
+  function dbCallbackWeeklyRetrieveEvent(err, rows) {
+    if (err) {
+      throw err;
+    }
+    // console.log('Weekly data received from Db:\n' + rows);
+    response.writeHead(200, { 'Content-Type': 'application/json' });
+    response.end(JSON.stringify(rows), 'utf-8');
+  }
   if (request.url.includes('/appointments')) {
+    // console.log('appointments');
     query = require('url').parse(request.url, true).query;
     db.data.retrieveWeeklyEvent(con, query, dbCallbackWeeklyRetrieveEvent);
-  } else {
+  } else if (request.url !== '/deleteAppointment' && request.url !== '/editAppointment') {
     fs.readFile('./' + filePath.split('?')[0], function readContents(error, content) {
       if (error) {
         throw error;
