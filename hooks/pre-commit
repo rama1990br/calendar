@@ -19,7 +19,7 @@ echo "\nValidating JavaScript:\n"
 
 for file in ${files}; do
     result=$(eslint ${file})
-    if [ "$?" eq 0 ]; then
+    if [ "$?" = 0 ]; then
         echo "ESLint Passed: ${file}"
     else
         echo "ESLint Failed: ${file}"
