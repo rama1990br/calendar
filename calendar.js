@@ -1,3 +1,47 @@
+var displayMonth = function displayMonthView() {
+  var thElements = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    j;
+  $.each(thElements, function monthDayOfWeekHeader(i, item) {
+    jQuery('<div/>', {
+      id: item,
+      role: 'columnheader',
+      class: 'PhLhOd elYzab-cXXICe-Hjleke',
+    }).appendTo('#weekOfDayHeader');
+
+    jQuery('<span/>', {
+      class: 'wy3aMe',
+      text: item,
+    }).appendTo('#' + item);
+  });
+
+  for (j = 0; j < 6; j += 1) {
+    jQuery('<div/>', {
+      id: 'date' + j,
+      class: 't8qpF elYzab-cXXICe-Hjleke YK7obe',
+    }).appendTo('#eachRow');
+
+    jQuery('<h2/>', {
+      class: 'yzYBvd',
+      text: j + 1 + ' Jan',
+    }).appendTo('#date' + j);
+
+    jQuery('<div/>', {
+      class: 'cKWEWe',
+    }).appendTo('#date' + j);
+
+    jQuery('<div/>', {
+      id: 'appointment' + j,
+      role: 'gridcell',
+      class: 'eADW5d',
+    }).appendTo('#dayAppointment');
+
+    jQuery('<h2/>', {
+      class: 'ynRLnc',
+      text: 'No events, ' + thElements[j] + j,
+    }).appendTo('#appointment' + j);
+  }
+};
+
 // function to create the skeleton of the calendar
 function createCalendarView(id, fromDate) {
   var table,
@@ -304,4 +348,4 @@ function displayCalendar() {
   addListenerToCellClick(table);
 }
 
-displayCalendar();
+

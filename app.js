@@ -101,6 +101,10 @@ http.createServer(function processRequest(request, response) {
     response.writeHead(200, { 'Content-Type': 'application/json' });
     response.end(JSON.stringify(rows), 'utf-8');
   }
+
+  if (request.url === '/monthView') {
+    filePath = 'month-view.html';
+  }
   if (request.url.includes('/appointments')) {
     // console.log('appointments');
     query = require('url').parse(request.url, true).query;
