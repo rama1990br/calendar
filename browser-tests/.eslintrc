@@ -1,0 +1,9 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+  "rules": {
+    "no-console": 0,                 // http://eslint.org/docs/rules/no-console
+    "func-names": 0                 // http://eslint.org/docs/rules/func-names
+  }
+}
