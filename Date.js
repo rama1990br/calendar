@@ -43,3 +43,25 @@ function getDayOfWeekInShortStringFormat(date, locale) {
 function getHour(date) {
   return (new Date(date)).getHours(); // Returns the hour (from 0-23)
 }
+
+function getTheDate(date) {
+  return new Date(date).getDate();
+}
+
+function getTheFirstDateInTheMonth(date) {
+  dateInDateTime = convertEpochToDateTime(date);
+  return new Date(dateInDateTime.getFullYear(), dateInDateTime.getMonth() + 1, 0).getDate();
+}
+
+function getTheLastDateInTheMonth(date) {
+  dateInDateTime = convertEpochToDateTime(date);
+  return new Date(dateInDateTime.getFullYear(), dateInDateTime.getMonth() + 1, 0).getDate();
+}
+
+function weekCount(year, monthNumber) {
+  // month_number is in the range 0..11
+  var firstOfMonth = new Date(year, monthNumber, 1);
+  var lastOfMonth = new Date(year, monthNumber + 1, 0);
+  var used = firstOfMonth.getDay() + lastOfMonth.getDate();
+  return Math.ceil( used / 7);
+}
