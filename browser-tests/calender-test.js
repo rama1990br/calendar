@@ -10,7 +10,7 @@ describe('Tests for calendar page', async function() {
   let browser;
   let page;
   beforeEach(async() => {
-    browser = await puppeteer.launch({headless: true});
+    browser = await puppeteer.launch({headless: false,  args: ['--no-sandbox', '--disable-setuid-sandbox']});
     page =  await browser.newPage();
     try {
       await page.goto('http://localhost:3000/', {waitUntil: 'networkidle2'});
