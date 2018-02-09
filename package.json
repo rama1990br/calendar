@@ -12,7 +12,7 @@
     "puppeteer": "^1.0.0"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha browser-tests"
+    "test": "node ./app.js && ./node_modules/mocha/bin/mocha browser-tests"
   },
   "repository": {
     "type": "git",
