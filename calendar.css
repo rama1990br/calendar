@@ -20,15 +20,15 @@
 	height: 240px;
 }
 
-.main-content{position:absolute;top:0;right:0;bottom:0;left:0;overflow-y:auto;outline:none}
-.grid-content{background-color:#fff;height:100%;display:-webkit-box;display:-moz-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;flex-direction:column}.tNDBE ul{list-style:none;padding:0}
-.week-of-day-header{margin:0;-webkit-align-items:stretch;align-items:stretch;display:-webkit-box;display:-moz-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-flex:none;-webkit-flex:none;flex:none;height:20px}.XnnJrc.Wyo4Qe{margin-left:32px;border-left:#e0e0e0 1px solid}
-.column-header{border-right:#e0e0e0 1px solid;padding-left:8px;-webkit-box-flex:1 1 0%;-webkit-flex:1 1 0%;flex:1 1 0%}.PhLhOd:last-child{border-right:none}.PhLhOd:before{display:inline-block;content:'';height:100%}
-.column-header-text{color:#757575;font-size:14px}
-.column-header-text{color:#4285f4;font-weight:500}
-.week-rows-container{margin:0;overflow:hidden;-webkit-box-flex:1 1 0%;-webkit-flex:1 1 0%;flex:1 1 0%;display:-webkit-box;display:-moz-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;flex-direction:column}
-.each-row-container{position:relative;overflow:hidden;border-bottom:#e0e0e0 1px solid;display:-webkit-box;display:-moz-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-flex:1 1 0%;-webkit-flex:1 1 0%;flex:1 1 0%}
-.each-row{position:absolute;top:0;right:0;bottom:0;left:0;display:-webkit-box;display:-moz-box;display:-webkit-flex;display:-ms-flexbox;display:flex}.gGDF0e.FOq9xf{left:33px}
-.each-cell{font-size:14px;line-height:32px;border-right:#e0e0e0 1px solid;padding-left:8px;color:#757575;-webkit-box-flex:1 1 0%;-webkit-flex:1 1 0%;flex:1 1 0%}.t8qpF:last-child{border-right:none}
-.each-cell-header{font-weight:400;margin:0;font-size:14px;float:left}.yzYBvd.F262Ye{margin-top:4px;margin-left:-2px;width:24px;height:24px;line-height:24px;text-align:center;color:#fff;background-color:#4285f4;-webkit-border-radius:50%;border-radius:50%}.yzYBvd:hover{text-decoration:underline;outline:none;cursor:pointer}
-.gridcell-text{font-weight:400;font-size:14px;}
+.main-content{}
+.grid-content{}
+.week-of-day-header{}
+.column-header{}
+.column-header-text{}
+.column-header-text{}
+.week-rows-container{}
+.each-row-container{}
+.each-row{}
+.each-cell{}
+.each-cell-header{}
+.appointment-text{font-weight:400;font-size:14px;}

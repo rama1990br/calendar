@@ -49,9 +49,12 @@ function getTheFirstDateInTheMonth(date) {
   return new Date(dateInDateTime.getFullYear(), dateInDateTime.getMonth() + 1, 0).getDate();
 }
 
-function getTheLastDateInTheMonth(date) {
-  dateInDateTime = convertEpochToDateTime(date);
-  return new Date(dateInDateTime.getFullYear(), dateInDateTime.getMonth() + 1, 0).getDate();
+function getTheLastDateOfMonth(month, year) {
+  return new Date(year, month + 1, 0).getDate();
+}
+
+function getMonthOfDate(date) {
+  return date.getMonth() + 1;
 }
 
 function weekCount(year, monthNumber) {
