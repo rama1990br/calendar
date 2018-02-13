@@ -44,10 +44,6 @@ function getHour(date) {
   return (new Date(date)).getHours(); // Returns the hour (from 0-23)
 }
 
-function getTheDate(date) {
-  return new Date(date).getDate();
-}
-
 function getTheFirstDateInTheMonth(date) {
   dateInDateTime = convertEpochToDateTime(date);
   return new Date(dateInDateTime.getFullYear(), dateInDateTime.getMonth() + 1, 0).getDate();
