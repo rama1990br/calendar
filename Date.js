@@ -54,7 +54,7 @@ function getTheLastDateOfMonth(month, year) {
 }
 
 function getMonthOfDate(date) {
-  return date.getMonth() + 1;
+  return date.getMonth();
 }
 
 function weekCount(year, monthNumber) {

@@ -15,21 +15,21 @@ function dbCallbackAddEvent(err, result) {
   if (err) {
     throw err;
   }
-  // console.log("1 record inserted");
+  console.log('1 record inserted');
 }
 
 function dbCallbackEditEvent(err, result) {
   if (err) {
     throw err;
   }
-  // console.log("1 record inserted");
+  console.log('1 record edited');
 }
 
 function dbCallbackDeleteEvent(err, result) {
   if (err) {
     throw err;
   }
-  // console.log("1 record deleted");
+  console.log('1 record deleted');
 }
 
 

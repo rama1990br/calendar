@@ -1,16 +1,17 @@
 (function weekView() {// function to create the skeleton of the calendar
-  function createCalendarView(id, fromDate) {
+  function createCalendarView(id, currentWeeksDates, epochFirstDayOfWeek) {
     var table,
       thElements,
       th,
       i,
       tr,
-      td;
-
+      td,
+      j = 0;
     function createTableHeader(day) {
       th = document.createElement('th');
-      th.id = i + day;
-      th.innerText = day;
+      th.id = j + day;
+      th.innerText = day + currentWeeksDates[j];
+      j++;
       table.appendChild(th);
     }
 
@@ -22,7 +23,7 @@
 
     table = document.createElement('table');
     table.id = id;
-    table.dataset.sundayepochtime = fromDate;
+    table.dataset.sundayepochtime = epochFirstDayOfWeek;
     thElements = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     th = document.createElement('th');
     th.innerText = 'Hour of day';
@@ -43,7 +44,7 @@
 
 
   // function to update the table according to the booked appointments
-  function updateCalendar(table, data) {
+  function updateCalendar(data) {
     var locale = 'en-US',
       eventName,
       startRow,
@@ -62,10 +63,7 @@
       $.each(startRow.childNodes, function displayParticularAppointment(j, eachAppointment) {
         var eventButton = document.createElement('button'),
           cell = document.getElementById(eachAppointment.id),
-          count;
-        if (eachAppointment.id !== '') {
           count = $('#' + eachAppointment.id).children().length;
-        }
         if (eachAppointment.id.includes(startTimeDay)) {
           eventButton.type = 'button';
           eventButton.id = eachAppointment.id + 'Appointment' + parseInt(count + 1, 10);
@@ -89,8 +87,23 @@
     return parseInt(stringInput, 10);
   }
 
+  function removePreviousAppointment(table, previousEvent) {
+    startTimeDay = getDayOfWeekInShortStringFormat(getNumberFromString(previousEvent.startTime), 'en-US');
+    startTimeHour = getHour(getNumberFromString(previousEvent.startTime));
+    endTimeHour = getHour(getNumberFromString(previousEvent.endTime));
+    startRow = document.getElementById(startTimeHour);
+    numberOfHours = endTimeHour - startTimeHour;
+    $.each(startRow.childNodes, function displayParticularAppointment(j, eachAppointment) {
+      var cell = document.getElementById(eachAppointment.id);
+      if (eachAppointment.id.includes(startTimeDay)) {
+        cell.removeChild(document.getElementById(eachAppointment.id + 'Appointment1'));
+      }
+    });
+  }
   function deleteAppointment(event) {
-    var retVal = true;
+    var table = document.getElementById('calendar-id'),
+      previousAppointment = {startTime: event.data.value.startTime, endTime: event.data.value.endTime, locationName: event.data.value.locationName, eventName: event.data.value.eventName},
+      retVal = true;
     if ( retVal === true ) {
       $.ajax({
         url: '/deleteAppointment',
@@ -99,7 +112,8 @@
         cache: false,
         success: function deleteSelectedAppointment() {
           $('#dialog').dialog('close');
-          // displayCalendar();
+          removePreviousAppointment(table, previousAppointment);
+          // getScheduleAndupdateCalendar(table, getNumberFromString(table.dataset.sundayepochtime), getSaturdayOfCurrentWeek(convertEpochToDateTime(getNumberFromString(table.dataset.sundayepochtime))));
         },
       });
     }
@@ -121,7 +135,7 @@
       },
       bookedEventArray = [sendInfo];
 
-    event.preventDefault();
+    // event.preventDefault();
     $.ajax({
       url: '/',
       method: 'POST',
@@ -129,24 +143,11 @@
       cache: false,
       success: function postNewAppointment() {
         $('#dialog').dialog('close');
-        updateCalendar(table, bookedEventArray);
+        updateCalendar(bookedEventArray);
       },
     });
   }
 
-  function removePreviousAppointment(table, previousEvent) {
-    startTimeDay = getDayOfWeekInShortStringFormat(getNumberFromString(previousEvent.startTime), 'en-US');
-    startTimeHour = getHour(getNumberFromString(previousEvent.startTime));
-    endTimeHour = getHour(getNumberFromString(previousEvent.endTime));
-    startRow = document.getElementById(startTimeHour);
-    numberOfHours = endTimeHour - startTimeHour;
-    $.each(startRow.childNodes, function displayParticularAppointment(j, eachAppointment) {
-      var cell = document.getElementById(eachAppointment.id);
-      if (eachAppointment.id.includes(startTimeDay)) {
-        cell.removeChild(document.getElementById(eachAppointment.id + 'Appointment1'));
-      }
-    });
-  }
 
   function editModal(event) {
     var table = document.getElementById('calendar-id'),
@@ -165,7 +166,7 @@
       },
       previousEvent = event.data.value,
       bookedEventArray = [sendInfo];
-    event.preventDefault();
+    // event.preventDefault();
     $.ajax({
       url: '/editAppointment',
       method: 'POST',
@@ -174,7 +175,7 @@
       success: function editAppointment() {
         $('#dialog').dialog('close');
         removePreviousAppointment(table, previousEvent);
-        updateCalendar(table, bookedEventArray);
+        updateCalendar(bookedEventArray);
       },
     });
   }
@@ -195,8 +196,8 @@
     $dialog.dialog('open');
     function populateModal(eventName, eventStartTime, eventEndTime, locationName, cancelButtonText) {
       $('#eventName').val(eventName);
-      $('#st' + startTime).attr('selected', 'selected');
-      $('#et' + endTime).attr('selected', 'selected');
+      $('#st' + eventStartTime).attr('selected', 'selected');
+      $('#et' + eventEndTime).attr('selected', 'selected');
       $('#locationName').val(locationName);
       $('#cancelOrDelete').text(cancelButtonText);
     }
@@ -208,12 +209,14 @@
         locationName: evt.target.dataset.locationName,
       };
       populateModal(deleteInfo.eventName, getHour(getNumberFromString(deleteInfo.startTime)), getHour(getNumberFromString(deleteInfo.endTime)), deleteInfo.locationName, 'Delete');
-      $('#cancelOrDelete').on('click', { value: deleteInfo }, deleteAppointment);
+      $('#cancelOrDelete').click({clickedColumnIndex: parseInt( $(this).index() - 1, 10), value: deleteInfo }, deleteAppointment);
       $('#confirm').click({clickedColumnIndex: parseInt( $(this).index() - 1, 10), value: deleteInfo }, editModal);
     } else {
       hour = evt.target.id.match(regexInt);
       startTime = hour ? parseInt(hour[0], 10) : 0;
+      endTime = (startTime + 1) % 24;
       $('#st' + startTime).attr('selected', 'selected');
+      $('#et' + endTime).attr('selected', 'selected');
       $('#cancelOrDelete').text('Cancel');
       $('#cancelOrDelete').click(cancelModal);
       $('#confirm').click({clickedColumnIndex: parseInt( $(this).index() - 1, 10)}, confirmModal);
@@ -225,7 +228,7 @@
   }
 
 
-  function getScheduleAndupdateCalendar(table, fromDate, toDate) {
+  function getScheduleAndupdateCalendar(fromDate, toDate) {
     $.ajax({
       url: '/appointments',
       data: {
@@ -235,22 +238,38 @@
       type: 'get',
       cache: false,
       success: function getParticularAppointments(data) {
-        updateCalendar(table, data);
+        updateCalendar(data);
       },
     });
   }
 
+  function getDatesOfCurrentWeek(epochFirstDayOfWeek) {
+    var i,
+      monthOfFirstDayOfWeek = new Date(epochFirstDayOfWeek).getMonth(),
+      yearOfFirstDayOfWeek = new Date(epochFirstDayOfWeek).getYear(),
+      dateOfFirstDayOfWeek = new Date(epochFirstDayOfWeek).getDate(),
+      lastDateOfFirstDaysMonth = getTheLastDateOfMonth(monthOfFirstDayOfWeek, yearOfFirstDayOfWeek),
+      currentDate = dateOfFirstDayOfWeek,
+      currentWeeksDates = [];
+    for (i = 0; i < 7; i++) {
+      currentDate = (currentDate - 1 === lastDateOfFirstDaysMonth) ? 1 : currentDate;
+      currentWeeksDates[i] = currentDate;
+      currentDate++;
+    }
+    return currentWeeksDates;
+  }
 
   function addListenersToPrevAndNextLinks() {
     var calendarElement = document.getElementById('calendar-id'),
-      sundayOfCurrentWeek =  (calendarElement !== null) ? getNumberFromString(calendarElement.dataset.sundayepochtime) : undefined;
+      sundayOfCurrentWeek = getNumberFromString(calendarElement.dataset.sundayepochtime);
     function createNewWeekViewAndUpdateAppointments(requiredWeeksSunday, requiredWeeksSaturday) {
-      var table;
       document.body.removeChild(calendarElement);
-      table = createCalendarView('calendar-id', requiredWeeksSunday, requiredWeeksSaturday);
-      document.body.appendChild(table);
-      addListenerToCellClick(table);
-      getScheduleAndupdateCalendar(table, requiredWeeksSunday, requiredWeeksSaturday);
+      requiredWeeksDates = getDatesOfCurrentWeek(requiredWeeksSunday);
+      calendarElement = createCalendarView('calendar-id', requiredWeeksDates, requiredWeeksSunday);
+      document.body.appendChild(calendarElement);
+      addListenerToCellClick(calendarElement);
+      getScheduleAndupdateCalendar(requiredWeeksSunday, requiredWeeksSaturday);
+      sundayOfCurrentWeek = requiredWeeksSunday;
     }
     function getPreviousAppointments() {
       var previousSunday = getSundayOfPreviousWeek(sundayOfCurrentWeek),
@@ -275,7 +294,6 @@
     }
     createButton('prevButton', '<', document.body);
     createButton('nextButton', '>', document.body);
-    addListenersToPrevAndNextLinks();
   }
 
 
@@ -285,22 +303,17 @@
     document.body.removeChild(calendarElement);
   }
 
-
   function displayWeekView() {
     var table,
-      calendarElement = document.getElementById('calendar-id'),
-      sundayEpochTime = (calendarElement !== null) ? getNumberFromString(calendarElement.dataset.sundayepochtime) : undefined;
+      epochFirstDayOfWeek = getSundayOfCurrentWeek(new Date()),
+      epochLastDayOfWeek = getSaturdayOfCurrentWeek(new Date()),
+      currentWeeksDates = getDatesOfCurrentWeek(epochFirstDayOfWeek);
     createPrevAndNextLinks();
-    if (sundayEpochTime !== undefined) { // if the current week view is being displayed, sundayEpochTime isn't set as yet. If previous or next week views are to be displayed, sundayEpochTime is set.
-      removeExistingWeekView(calendarElement);
-      table = createCalendarView('calendar-id', sundayEpochTime);
-      getScheduleAndupdateCalendar(table, sundayEpochTime, getSaturdayOfCurrentWeek(convertEpochToDateTime(sundayEpochTime)));
-    } else {
-      table = createCalendarView('calendar-id', getSundayOfCurrentWeek(new Date()));
-      getScheduleAndupdateCalendar(table, getSundayOfCurrentWeek(new Date()), getSaturdayOfCurrentWeek(new Date()));
-    }
+    table = createCalendarView('calendar-id', currentWeeksDates, epochFirstDayOfWeek);
+    getScheduleAndupdateCalendar(epochFirstDayOfWeek, epochLastDayOfWeek);
     document.body.appendChild(table);
     addListenerToCellClick(table);
+    addListenersToPrevAndNextLinks();
   }
   $(displayWeekView);
 }());
