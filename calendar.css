@@ -1,4 +1,4 @@
-﻿#calendar-id {
+#calendar-id {
     width: 100%;
 }
 
@@ -14,9 +14,21 @@
     background-color: #4CAF50;
     color: white;
 }
-/* The following class has been added to reduce the height of the modal element. Otherwise, the modal element 
+/* The following class has been added to reduce the height of the modal element. Otherwise, the modal element
 	covers the entire table area which is not desirable. */
 .modal-height {
 	height: 240px;
 }
 
+.main-content{}
+.grid-content{}
+.week-of-day-header{}
+.column-header{}
+.column-header-text{}
+.column-header-text{}
+.week-rows-container{}
+.each-row-container{}
+.each-row{}
+.each-cell{}
+.each-cell-header{}
+.appointment-text{font-weight:400;font-size:14px;}

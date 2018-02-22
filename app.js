@@ -15,21 +15,21 @@ function dbCallbackAddEvent(err, result) {
   if (err) {
     throw err;
   }
-  // console.log("1 record inserted");
+  console.log('1 record inserted');
 }
 
 function dbCallbackEditEvent(err, result) {
   if (err) {
     throw err;
   }
-  // console.log("1 record inserted");
+  console.log('1 record edited');
 }
 
 function dbCallbackDeleteEvent(err, result) {
   if (err) {
     throw err;
   }
-  // console.log("1 record deleted");
+  console.log('1 record deleted');
 }
 
 
@@ -100,6 +100,10 @@ http.createServer(function processRequest(request, response) {
     // console.log('Weekly data received from Db:\n' + rows);
     response.writeHead(200, { 'Content-Type': 'application/json' });
     response.end(JSON.stringify(rows), 'utf-8');
+  }
+
+  if (request.url === '/monthView') {
+    filePath = 'month-view.html';
   }
   if (request.url.includes('/appointments')) {
     // console.log('appointments');

@@ -30,7 +30,6 @@ describe('Tests for calendar page', async function() {
     });
     it('should contain a calendar with id equal to calendar-id', async() => {
       await page.$('#calendar-id').should.eventually.not.equal(null);
-      await page.screenshot({path: 'screenshot.png'});
     });
   });
   await page.close();

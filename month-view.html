@@ -1,115 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
-    <title>Google calendar</title>
+    <title>Monthly view</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="calendar.css"/>
-</head>
-<body>
-
+  </head>
+  <body>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-  crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+    integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+    crossorigin="anonymous"></script>
     <script src="./Date.js"></script>
-    <div id="month-view" class="">
-      <div role="main" tabindex="-1" aria-describedby="c8865" class="Xro3Db-nUpftc" jscontroller="raWRAc" jsaction="ShTWhb:u9xqIe;ykdOf:XsjTP;bYCWbe:kCtXif;ell1J:KmWemb;DKd9Ob:PEFSMe;F2qKcc:pN2nfb;S1X3n:AOJ9lf;oEncVd:CAGJf;lMJhnd:xHEQGc;JxJdu:ymAKke;bjyof:PGxz3c;crveJe:D5o1fd;vuWWmd:j03tib;SORGyc:Tp2SZe;co88Ab:tYm26b;bbT2Xd:KbbOyc;ULCUVb:KbbOyc;LTfiof:KbbOyc;hOcA1b:KbbOyc;GvneHb:KbbOyc;sj4Ybd:vwvL4d;khLCqd:rbRoAf;rcuQ6b:npT2md;" jslog="34348; track:impression" data-slide-transition-index="24479" data-mouse-wheel="true" style="opacity: 1;">
-        <div role="grid" aria-readonly="true" class="tNDBE" jscontroller="vYELj" jsaction="m2jnff:rQPSTd;rcuQ6b:npT2md; 'focusin':npT2md; click:Tp2SZe(KpB2Ud);A4uS1b:.CLIENT;znnfEd:.CLIENT;YOrDqe:.CLIENT;vL1IB:.CLIENT;sSfkvb:.CLIENT;zHe0gf:.CLIENT;y6LN7c:.CLIENT;pPc6Qe:.CLIENT;kQj7Pe:.CLIENT;przuUe:.CLIENT" data-start-date-key="24479" data-end-date-key="24643" data-is-column-view-context="false" data-chip-offset-top="32" data-chip-rows="2">
-          <div role="row" class="XnnJrc">
-            <div role="columnheader" tabindex="0" class="PhLhOd elYzab-cXXICe-Hjleke" data-dragsource-type="8" data-dragsource-delay="0"><span class="ynRLnc">Sunday</span><span aria-hidden="true" class="wy3aMe">Sun</span></div>
-            <div role="columnheader" tabindex="0" class="PhLhOd elYzab-cXXICe-Hjleke" data-dragsource-type="8" data-dragsource-delay="0"><span class="ynRLnc">Monday</span><span aria-hidden="true" class="wy3aMe">Mon</span></div>
-            <div role="columnheader" tabindex="0" class="PhLhOd elYzab-cXXICe-Hjleke" data-dragsource-type="8" data-dragsource-delay="0"><span class="ynRLnc">Tuesday</span><span aria-hidden="true" class="wy3aMe">Tue</span></div>
-            <div role="columnheader" tabindex="0" class="PhLhOd elYzab-cXXICe-Hjleke" data-dragsource-type="8" data-dragsource-delay="0"><span class="ynRLnc">Wednesday</span><span aria-hidden="true" class="wy3aMe">Wed</span></div>
-            <div role="columnheader" tabindex="0" class="PhLhOd elYzab-cXXICe-Hjleke" data-dragsource-type="8" data-dragsource-delay="0"><span class="ynRLnc">Thursday</span><span aria-hidden="true" class="wy3aMe">Thu</span></div>
-            <div role="columnheader" tabindex="0" class="PhLhOd elYzab-cXXICe-Hjleke" data-dragsource-type="8" data-dragsource-delay="0"><span class="ynRLnc">Friday</span><span aria-hidden="true" class="wy3aMe">Fri</span></div>
-            <div role="columnheader" tabindex="0" class="PhLhOd elYzab-cXXICe-Hjleke" data-dragsource-type="8" data-dragsource-delay="0"><span class="ynRLnc">Saturday</span><span aria-hidden="true" class="wy3aMe">Sat</span></div>
+    <script src="./month-view.js"></script>
+    <div id="month-view">
+      <div role="main" class="main-content">
+        <div role="grid" class="grid-content">
+          <div role="row" id="weekOfDayHeader" class="week-of-day-header">
           </div>
-          <div role="presentation" class="Bd2qQe">
-            <div role="row" class="QIadxc">
-              <div aria-hidden="true" jsname="GkYald" class="gGDF0e">
-                <div class="t8qpF elYzab-cXXICe-Hjleke" jsname="LF4U9b" data-datekey="24479" data-dragsource-type="8" data-dragsource-delay="0">
-                  <h2 aria-hidden="true" jsname="KpB2Ud" data-dragsource-ignore="true" class="yzYBvd ">31
-                  </h2>
-                  <div class="cKWEWe"></div>
-                </div>
-                <div class="t8qpF elYzab-cXXICe-Hjleke YK7obe" jsname="LF4U9b" data-datekey="24609" data-dragsource-type="8" data-dragsource-delay="0">
-                  <h2 aria-hidden="true" jsname="KpB2Ud" data-dragsource-ignore="true" class="yzYBvd ">1 Jan</h2>
-                  <div class="cKWEWe"></div>
-                </div>
-                <div class="t8qpF elYzab-cXXICe-Hjleke YK7obe" jsname="LF4U9b" data-datekey="24610" data-dragsource-type="8" data-dragsource-delay="0">
-                  <h2 aria-hidden="true" jsname="KpB2Ud" data-dragsource-ignore="true" class="yzYBvd ">2 Jan</h2>
-                  <div class="cKWEWe"></div>
-                </div>
-                <div class="t8qpF elYzab-cXXICe-Hjleke YK7obe" jsname="LF4U9b" data-datekey="24611" data-dragsource-type="8" data-dragsource-delay="0">
-                  <h2 aria-hidden="true" jsname="KpB2Ud" data-dragsource-ignore="true" class="yzYBvd ">3 Jan</h2>
-                  <div class="cKWEWe"></div>
-                </div>
-                <div class="t8qpF elYzab-cXXICe-Hjleke YK7obe" jsname="LF4U9b" data-datekey="24612" data-dragsource-type="8" data-dragsource-delay="0">
-                  <h2 aria-hidden="true" jsname="KpB2Ud" data-dragsource-ignore="true" class="yzYBvd ">4 Jan</h2>
-                  <div class="cKWEWe"></div>
-                </div>
-                <div class="t8qpF elYzab-cXXICe-Hjleke YK7obe" jsname="LF4U9b" data-datekey="24613" data-dragsource-type="8" data-dragsource-delay="0">
-                  <h2 aria-hidden="true" jsname="KpB2Ud" data-dragsource-ignore="true" class="yzYBvd ">5 Jan</h2>
-                  <div class="cKWEWe"></div>
-                </div>
-                <div class="t8qpF elYzab-cXXICe-Hjleke YK7obe" jsname="LF4U9b" data-datekey="24614" data-dragsource-type="8" data-dragsource-delay="0">
-                  <h2 aria-hidden="true" jsname="KpB2Ud" data-dragsource-ignore="true" class="yzYBvd ">6 Jan</h2>
-                  <div class="cKWEWe"></div>
-                </div>
-              </div>
-
-              <div class="qOxDcf">
-                <div role="presentation" class="rES0Be elYzab-cXXICe-Hjleke" style="height:2em;" jscontroller="njBlKd" data-dragsource-type="8" data-dragsource-delay="0">
-                  <div role="gridcell" aria-labelledby="c8939" tabindex="0" class="eADW5d">
-                    <h2 id="c8939" class="ynRLnc">No events, Sunday 31</h2>
-                  </div>
-                  <div role="gridcell" aria-labelledby="c8940" tabindex="0" class="eADW5d">
-                    <h2 id="c8940" class="ynRLnc">2 events, Monday 1</h2>
-                    <div role="presentation">
-                      <div key="MjAxODAxMDFfNjBvMzBkMzVjZ28zMGMxZzYwbzMwZHI1NjggZW4uaW5kaWFuI2hvbGlkYXlAdg" data-eventid="MjAxODAxMDFfNjBvMzBkMzVjZ28zMGMxZzYwbzMwZHI1NjggZW4uaW5kaWFuI2hvbGlkYXlAdg" data-opens-details="true" data-keyboardactiontype="0;1" jscontroller="Bo3nHd" jsaction="click:cOuCgd; contextmenu:mg9Pef; dblclick:Reio8; mouseenter:tfO1Yc; mouseleave:JywGue;" jslog="35463; track:click,dblclick" class="ifwtOb elYzab-cXXICe-Hjleke NlL62b GHWQBd xHTz8b" data-dragsource-type="9" style="left:14.29%; width:14.29%; top:0em;">
-                        <div class="g3dbUc jKgTF QGRmIf" style="background-color:#7986CB;" role="button" tabindex="0">
-                          <span aria-hidden="true" class="c1wk3e">
-                            <span class="yzifAd ">
-                              <html-blob>New Year's Day</html-blob>
-                            </span>
-                          </span>
-                          <span class="ynRLnc">All day, New Year&amp;#39;s Day, Calendar: Holidays in India, Accepted, No location, Monday, 1 Jan 2018
-                          </span>
-                        </div>
-                      </div>
-                      <div key="MjAxODAxMDFfNjBvMzBkcjQ2b28zMGMxZzYwbzMwZHI1NjggZW4udXNhI2hvbGlkYXlAdg" data-eventid="MjAxODAxMDFfNjBvMzBkcjQ2b28zMGMxZzYwbzMwZHI1NjggZW4udXNhI2hvbGlkYXlAdg" data-opens-details="true" data-keyboardactiontype="0;1" jscontroller="Bo3nHd" jsaction="click:cOuCgd; contextmenu:mg9Pef; dblclick:Reio8; mouseenter:tfO1Yc; mouseleave:JywGue;" jslog="35463; track:click,dblclick" class="ifwtOb elYzab-cXXICe-Hjleke NlL62b GHWQBd xHTz8b" data-dragsource-type="9" style="left:14.29%; width:14.29%; top:1em;">
-                        <div class="g3dbUc jKgTF QGRmIf" style="background-color:#0B8043;" role="button" tabindex="0">
-                          <span aria-hidden="true" class="c1wk3e">
-                            <span class="yzifAd ">
-                              <html-blob>New Year's Day</html-blob>
-                            </span>
-                          </span>
-                          <span class="ynRLnc">All day, New Year&amp;#39;s Day, Calendar: Holidays in United States, Accepted, No location, Monday, 1 Jan 2018</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div role="gridcell" aria-labelledby="c8941" tabindex="0" class="eADW5d">
-                    <h2 id="c8941" class="ynRLnc">No events, Tuesday 2</h2>
-                  </div>
-                  <div role="gridcell" aria-labelledby="c8942" tabindex="0" class="eADW5d">
-                    <h2 id="c8942" class="ynRLnc">No events, Wednesday 3</h2>
-                  </div>
-                  <div role="gridcell" aria-labelledby="c8943" tabindex="0" class="eADW5d">
-                    <h2 id="c8943" class="ynRLnc">No events, Thursday 4</h2>
-                  </div>
-                  <div role="gridcell" aria-labelledby="c8944" tabindex="0" class="eADW5d">
-                    <h2 id="c8944" class="ynRLnc">No events, Friday 5</h2>
-                  </div>
-                  <div role="gridcell" aria-labelledby="c8945" tabindex="0" class="eADW5d">
-                    <h2 id="c8945" class="ynRLnc">No events, Saturday 6</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div id="rowHolder" role="presentation" class="week-rows-container">
           </div>
         </div>
-
+      </div>
+    </div>
 </body>
 </html>
