@@ -51,10 +51,10 @@
   function displayMonthView() {
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], // Days of the Week
       currentMonth = getMonthOfDate(new Date()),
-      currentYear = new Date().getYear(),
+      currentYear = new Date().getFullYear(),
       previousMonth = currentMonth - 1,
       numWeeksInCurrentMonth = weekCount(currentYear, currentMonth),
-      sundayOfCurrentWeek = new Date(getSundayOfWeek(new Date(2018, 1, 1))), // Gives the number of weeks of the current calendar month, not necessarily from 1st to the last date of the current month, but from the first Sunday of the calendar month view to the last date.
+      sundayOfCurrentWeek = new Date(getSundayOfCurrentWeek(new Date(2018, 1, 1))), // Gives the number of weeks of the current calendar month, not necessarily from 1st to the last date of the current month, but from the first Sunday of the calendar month view to the last date.
       firstSundayOfMonth = sundayOfCurrentWeek.getDate(), // First day of the month in the calendar view, not necessarily the first day of the month
       lastDateOfPreviousMonth = getTheLastDateOfMonth(previousMonth, currentYear),
       currentDate = firstSundayOfMonth,
@@ -65,9 +65,19 @@
     for (i = 0; i < numWeeksInCurrentMonth; i++) {
       createRow(i);
       for (j = 0; j < 7; j++) {
+        if (currentDate - 1 === lastDateOfPreviousMonth) {
+          currentDate = 1;
+          if (previousMonth === 11) {
+            previousMonth = 0;
+            currentYear = currentYear + 1;
+          } else {
+            previousMonth = previousMonth + 1;
+          }
+          lastDateOfPreviousMonth = getTheLastDateOfMonth(previousMonth, currentYear);
+        }
         createCell(i, j, currentDate);
+        currentDate++;
         createAppointment(i, j);
-        currentDate = (currentDate + 1) % lastDateOfPreviousMonth;
       }
     }
   }

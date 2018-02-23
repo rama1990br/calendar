@@ -20,10 +20,13 @@
 	height: 240px;
 }
 
-.main-content{}
+.main-content{height: 100%;}
 .grid-content{}
 .week-of-day-header{}
-.column-header{}
+.column-header{width: 14%;
+    height: 200px;
+    /* background: red; */
+    float: left;}
 .column-header-text{}
 .column-header-text{}
 .week-rows-container{}

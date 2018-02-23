@@ -24,6 +24,12 @@ describe('Tests for calendar page', async function() {
     this.timeout(10000);
     this.retries(3);
     // Add your test cases here, refer https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md on how to write tests
+    it('should contain a previous week button with id equal to prevButton', async() => {
+      await page.$('#prevButton').should.eventually.not.equal(null);
+    });
+    it('should contain a next week button with id equal to nextButton', async() => {
+      await page.$('#nextButton').should.eventually.not.equal(null);
+    });
     it('should contain heading section with appropriate heading', async() => {
       const heading = await page.$eval('h1', h1 => h1.innerText);
       heading.should.equal('Your schedule for the week');
