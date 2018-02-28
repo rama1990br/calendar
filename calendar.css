@@ -20,18 +20,22 @@
 	height: 240px;
 }
 
-.main-content{height: 100%;}
-.grid-content{}
-.week-of-day-header{}
-.column-header{width: 14%;
-    height: 200px;
-    /* background: red; */
-    float: left;}
-.column-header-text{}
-.column-header-text{}
-.week-rows-container{}
-.each-row-container{}
-.each-row{}
-.each-cell{}
-.each-cell-header{}
+.div-table {
+  display: table;
+  width: auto;
+  background-color: #eee;
+  border: 1px solid #666666;
+  border-spacing: 5px; /* cellspacing:poor IE support for  this */
+}
+.div-table-row {
+  display: table-row;
+  width: auto;
+  clear: both;
+}
+.div-table-cell {
+  float: left; /* fix for  buggy browsers */
+  display: table-cell;
+  width: 100px;
+  background-color: #ccc;
+}
 .appointment-text{font-weight:400;font-size:14px;}

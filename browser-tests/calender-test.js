@@ -30,10 +30,6 @@ describe('Tests for calendar page', async function() {
     it('should contain a next week button with id equal to nextButton', async() => {
       await page.$('#nextButton').should.eventually.not.equal(null);
     });
-    it('should contain heading section with appropriate heading', async() => {
-      const heading = await page.$eval('h1', h1 => h1.innerText);
-      heading.should.equal('Your schedule for the week');
-    });
     it('should contain a calendar with id equal to calendar-id', async() => {
       await page.$('#calendar-id').should.eventually.not.equal(null);
     });
