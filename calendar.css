@@ -20,19 +20,20 @@
 	height: 240px;
 }
 
-.div-table {
+.month-view {
   display: table;
   width: auto;
   background-color: #eee;
   border: 1px solid #666666;
   border-spacing: 5px; /* cellspacing:poor IE support for  this */
 }
-.div-table-row {
+[class^="row"]
+ {
   display: table-row;
   width: auto;
   clear: both;
 }
-.div-table-cell {
+[class^="cell"] {
   float: left; /* fix for  buggy browsers */
   display: table-cell;
   width: 100px;

@@ -1,39 +1,37 @@
 (function monthView() {
-  function addColumnHeaders(thElements) {
+  function addColumnHeaders() {
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; // Days of the Week
     $('<div/>', {
-      id: 'tableHeader',
       role: 'columnheader',
-      class: 'div-table-row',
-    }).appendTo('#tableContainer');
-    $.each(thElements, function monthDayOfWeekHeader(i, item) {
+      attr: ({ 'data-row': 0}),
+      class: 'row',
+    }).appendTo('.month-view');
+    $.each(days, function monthDayOfWeekHeader(i, item) {
       $('<div>', {
-        class: 'div-table-cell',
+        class: 'cell',
         text: item,
-      }).appendTo('#tableHeader');
+      }).appendTo($('.row'));
     });
   }
 
   function createRow(j) {
     $('<div/>', {
-      id: 'row' + j,
       role: 'row',
-      class: 'div-table-row',
-    }).appendTo('#tableContainer');
+      class: 'row' + j,
+    }).appendTo('.month-view');
   }
 
   function createCell(j, k, dateOfMonth) {
     $('<div/>', {
-      id: 'date' + j + k,
-      class: 'div-table-cell',
+      class: 'cell' + j + k,
       text: dateOfMonth,
-    }).appendTo('#row' + j);
+    }).appendTo('.row' + j);
   }
 
   function createAppointment(j, k) {
     $('<div/>', {
-      id: 'appointment' + j + k,
       text: 'No events',
-    }).appendTo('#date' + j + k);
+    }).appendTo('.cell' + j + k);
   }
 
   function createPrevAndNextLinks() {
@@ -51,12 +49,11 @@
     return parseInt(stringInput, 10);
   }
   function addListenersToPrevAndNextLinks() {
-    var monthViewTable = document.getElementById('tableContainer'),
+    var monthViewTable = document.getElementsByClassName('month-view')[0],
       currentMonth = getNumberFromString(monthViewTable.dataset.displayedMonth),
       currentYear = getNumberFromString(monthViewTable.dataset.displayedYear);
     function createNewMonthView(requiredMonth, requiredYear) {
-      var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        previousMonth = requiredMonth === 0 ? 11 : requiredMonth - 1,
+      var previousMonth = requiredMonth === 0 ? 11 : requiredMonth - 1,
         previousMonthsYear = previousMonth === 11 ? requiredYear - 1 : requiredYear,
         numWeeksInRequiredMonth = weekCount(requiredYear, requiredMonth),
         sundayOfFirstWeek = new Date(getSundayOfCurrentWeek(new Date(requiredYear, requiredMonth, 1))), // Gives the number of weeks of the current calendar month, not necessarily from 1st to the last date of the current month, but from the first Sunday of the calendar month view to the last date.
@@ -66,11 +63,15 @@
         currentDate = firstSundayOfMonth,
         monthName = document.getElementById('monthName');
       monthName.innerHTML = new Date(requiredYear, requiredMonth, 1).toLocaleString('en-US', { month: 'long' });
-      document.body.removeChild(monthViewTable);
-      monthViewTable = document.createElement('div');
-      monthViewTable.id = 'tableContainer';
-      document.body.appendChild(monthViewTable);
-      addColumnHeaders(days);
+      $('.month-view').find('div').each(function clearCellContents() {
+        $(this).text('');
+      });
+
+      // document.body.removeChild(monthViewTable);
+      // monthViewTable = document.createElement('div');
+      // monthViewTable.className = 'month-view';
+      // document.body.appendChild(monthViewTable);
+      // addColumnHeaders();
       for (i = 0; i < numWeeksInRequiredMonth; i++) {
         createRow(i);
         for (j = 0; j < 7; j++) {
@@ -109,8 +110,7 @@
   }
 
   function displayMonthView() {
-    var monthViewTable = document.getElementById('tableContainer'),
-      days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], // Days of the Week
+    var monthViewTable = document.getElementsByClassName('month-view')[0],
       currentMonth = getMonthOfDate(new Date()),
       currentYear = new Date().getFullYear(),
       previousMonth = currentMonth === 0 ? 11 : currentMonth - 1,
@@ -128,7 +128,7 @@
     monthViewTable.dataset.displayedYear = currentYear;
     createPrevAndNextLinks();
     addListenersToPrevAndNextLinks(previousMonth, currentYear, currentMonth + 1);
-    addColumnHeaders(days);
+    addColumnHeaders();
     for (i = 0; i < numWeeksInCurrentMonth; i++) {
       createRow(i);
       for (j = 0; j < 7; j++) {
