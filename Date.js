@@ -57,10 +57,17 @@ function getMonthOfDate(date) {
   return date.getMonth();
 }
 
+function getYearOfDate(date) {
+  return date.getFullYear();
+}
 function weekCount(year, monthNumber) {
   // month_number is in the range 0..11
   var firstOfMonth = new Date(year, monthNumber, 1);
   var lastOfMonth = new Date(year, monthNumber + 1, 0);
   var used = firstOfMonth.getDay() + lastOfMonth.getDate();
   return Math.ceil( used / 7);
+}
+
+function getNameOfMonth(year, month, locale) {
+  return new Date(year, month, 1).toLocaleString(locale, { month: 'long' });
 }
