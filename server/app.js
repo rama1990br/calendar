@@ -15,27 +15,28 @@ function dbCallbackAddEvent(err, result) {
   if (err) {
     throw err;
   }
-  console.log('1 record inserted');
+  // console.log('1 record inserted');
 }
 
 function dbCallbackEditEvent(err, result) {
   if (err) {
     throw err;
   }
-  console.log('1 record edited');
+  // console.log('1 record edited');
 }
 
 function dbCallbackDeleteEvent(err, result) {
   if (err) {
     throw err;
   }
-  console.log('1 record deleted');
+  // console.log('1 record deleted');
 }
 
 
 http.createServer(function processRequest(request, response) {
+  // console.log(request.url);
   var body = '',
-    filePath = request.url === '/' ? 'index.html' : request.url,
+    filePath = request.url === '/' ? './client/index.html' : request.url,
     extName,
     query;
   if (request.url === '/favicon.ico') {           // code to handle favicon.ico image
@@ -69,7 +70,7 @@ http.createServer(function processRequest(request, response) {
       }
       db.data.deleteEvent(con, body, dbCallbackDeleteEvent);
     });
-    fs.readFile('./index.html', function readContents(error, content) {
+    fs.readFile('./client/index.html', function readContents(error, content) {
       if (error) {
         throw error;
       } else {
@@ -103,14 +104,14 @@ http.createServer(function processRequest(request, response) {
   }
 
   if (request.url === '/monthView') {
-    filePath = 'month-view.html';
+    filePath = 'client/month-view.html';
   }
   if (request.url.includes('/appointments')) {
     // console.log('appointments');
     query = require('url').parse(request.url, true).query;
     db.data.retrieveWeeklyEvent(con, query, dbCallbackWeeklyRetrieveEvent);
   } else if (request.url !== '/deleteAppointment' && request.url !== '/editAppointment') {
-    fs.readFile('./' + filePath.split('?')[0], function readContents(error, content) {
+    fs.readFile('../' + filePath.split('?')[0], function readContents(error, content) {
       if (error) {
         throw error;
       } else {

@@ -22,25 +22,20 @@
     }).appendTo('.month-view');
   }
 
-  function createCell(i, j) {
+  function createCell(i, j, classForOpacity) {
     $('<div/>', {
-      class: 'cell',
+      class: 'cell ' + classForOpacity,
       attr: ({'data-cell-number': j}),
       role: 'cell',
     }).appendTo($('div').find("[data-row-number='" + i + "']"));
   }
 
-  function createAppointment(j, k) {
-    $('<div/>', {
-      text: 'No events',
-    }).appendTo('.cell');
-  }
   function getNumberFromString(stringInput) {
     return parseInt(stringInput, 10);
   }
 
   function fillDates(i, j, currentDate) {
-    $( "div[data-row-number='" + i + "'] > div[data-cell-number='" + j + "'" )[0].innerHTML = currentDate;
+    $( "div[data-row-number='" + i + "'] > div[data-cell-number='" + j + "'" )[0].innerHTML = currentDate + '<div>No events</div>';
   }
   function createCalendar(month, year) {
     var numOfWeeksInMonth = weekCount(year, month),
@@ -53,7 +48,8 @@
       currentDate = firstSundayOfMonth,
       locale = 'en-US',
       i,
-      j;
+      j,
+      classForOpacity = '';
     if ($('.month-view').children().length !== 0) {
       $('.month-view').children().remove();
     }
@@ -67,10 +63,13 @@
         if ((currentDate - 1 === lastDateOfPreviousMonth && i === 0) || (currentDate - 1 === lastDateOfMonth && i === numOfWeeksInMonth - 1)) {
           currentDate = 1;
         }
-        createCell(i, j);
+        if ((i === 0 && currentDate >= 20) || (i === numOfWeeksInMonth - 1 && currentDate <= 7)) {
+          classForOpacity = 'classForOpacity';
+        }
+        createCell(i, j, classForOpacity);
         fillDates(i, j, currentDate);
         currentDate++;
-        // createAppointment(i, j);
+        classForOpacity = '';
       }
     }
   }
