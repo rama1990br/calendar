@@ -1,22 +1,4 @@
-#calendar-id {
-  width: 100%; }
-
-#calendar-id th {
-  color: white;
-  text-align: left;
-  background-color: #4caf50; }
-
-#calendar-id th,
-#calendar-id td {
-  padding: 8px;
-  border: 1px solid #ddd; }
-
-/* The following class has been added to reduce the height of the modal element. Otherwise, the modal element
-	covers the entire table area which is not desirable. */
-.modal-height {
-  height: 240px; }
-
-.month-view {
+.day-view {
   display: table;
   width: auto;
   background-color: #eee;
@@ -39,6 +21,11 @@
 .row + .row {
   height: 50px; }
 
+/* The following class has been added to reduce the height of the modal element. Otherwise, the modal element
+  covers the entire table area which is not desirable. */
+.modal-height {
+  height: 240px; }
+
 .classForOpacity,
 .classForOpacity > a {
   color: rgba(0, 0, 0, 0.3); }
@@ -51,11 +38,7 @@ a:hover,
 a:focus {
   text-decoration: underline; }
 
-.appointment-text {
-  font-weight: 400;
-  font-size: 14px; }
-
 .cell-width {
   width: 12px; }
 
-/*# sourceMappingURL=calendar.css.map */
+/*# sourceMappingURL=day-view.css.map */

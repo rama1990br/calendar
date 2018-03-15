@@ -40,6 +40,9 @@ function getDayOfWeekInShortStringFormat(date, locale) {
   return (new Date(date)).toLocaleString(locale, {weekday: 'short'});  // Returns first three letters of day of week,e.g : Tue
 }
 
+function getDayOfWeek(date, locale) {
+  return date.toLocaleString(locale, {weekday: 'long', month: 'long', day: '2-digit', year: 'numeric'});
+}
 function getHour(date) {
   return (new Date(date)).getHours(); // Returns the hour (from 0-23)
 }

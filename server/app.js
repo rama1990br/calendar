@@ -106,6 +106,9 @@ http.createServer(function processRequest(request, response) {
   if (request.url === '/monthView') {
     filePath = 'client/month-view.html';
   }
+  if (request.url.includes('/dayView')) {
+    filePath = 'client/day-view.html';
+  }
   if (request.url.includes('/appointments')) {
     // console.log('appointments');
     query = require('url').parse(request.url, true).query;
