@@ -22,27 +22,22 @@
     }).appendTo('.month-view');
   }
 
-  function createCell(i, j) {
+  function createCell(i, j, classForOpacity) {
     $('<div/>', {
-      class: 'cell',
+      class: 'cell ' + classForOpacity,
       attr: ({'data-cell-number': j}),
       role: 'cell',
     }).appendTo($('div').find("[data-row-number='" + i + "']"));
   }
 
-  function createAppointment(j, k) {
-    $('<div/>', {
-      text: 'No events',
-    }).appendTo('.cell');
-  }
   function getNumberFromString(stringInput) {
     return parseInt(stringInput, 10);
   }
 
-  function fillDates(i, j, currentDate) {
-    $( "div[data-row-number='" + i + "'] > div[data-cell-number='" + j + "'" )[0].innerHTML = currentDate;
+  function fillDates(i, j, currentDate, month, year) {
+    $( "div[data-row-number='" + i + "'] > div[data-cell-number='" + j + "'" )[0].innerHTML = "<a href='/dayView?date=" + currentDate + '&month=' + month + '&year=' + year + "'>"   + currentDate + '</a>' + '<div>No events</div>';
   }
-  function createCalendar(month, year) {
+  function createCalendar(month, year, locale) {
     var numOfWeeksInMonth = weekCount(year, month),
       sundayOfFirstWeek = new Date(getSundayOfCurrentWeek(new Date(year, month, 1))), // Gives the number of weeks of the current calendar month, not necessarily from 1st to the last date of the current month, but from the first Sunday of the calendar month view to the last date.
       firstSundayOfMonth = sundayOfFirstWeek.getDate(), // First day of the month in the calendar view, not necessarily the first day of the month
@@ -51,9 +46,9 @@
       previousMonthsYear = month === 11 ? year - 1 : year,
       lastDateOfPreviousMonth = getTheLastDateOfMonth(previousMonth, previousMonthsYear),
       currentDate = firstSundayOfMonth,
-      locale = 'en-US',
       i,
-      j;
+      j,
+      classForOpacity = '';
     if ($('.month-view').children().length !== 0) {
       $('.month-view').children().remove();
     }
@@ -67,10 +62,13 @@
         if ((currentDate - 1 === lastDateOfPreviousMonth && i === 0) || (currentDate - 1 === lastDateOfMonth && i === numOfWeeksInMonth - 1)) {
           currentDate = 1;
         }
-        createCell(i, j);
-        fillDates(i, j, currentDate);
+        if ((i === 0 && currentDate >= 20) || (i === numOfWeeksInMonth - 1 && currentDate <= 7)) {
+          classForOpacity = 'classForOpacity';
+        }
+        createCell(i, j, classForOpacity);
+        fillDates(i, j, currentDate, month, year);
         currentDate++;
-        // createAppointment(i, j);
+        classForOpacity = '';
       }
     }
   }
@@ -109,7 +107,7 @@
     var currentMonth = getMonthOfDate(new Date()),
       currentYear = getYearOfDate(new Date()),
       locale = 'en-US';
-    createCalendar(currentMonth, currentYear);
+    createCalendar(currentMonth, currentYear, locale);
     createPrevAndNextLinks();
   }
   $(displayMonthView); //  ==> body.onload = function() {} shorthand delayed evaluation
