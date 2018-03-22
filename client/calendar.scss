@@ -1,13 +1,16 @@
-#calendar-id { width: 100%; }
+#calendar,
+table {
+  width: 100%;
+}
 
-#calendar-id th {
+#calendar th {
   color: white;
   text-align: left;
   background-color: #4caf50;
 }
 
-#calendar-id th,
-#calendar-id td {
+#calendar th,
+#calendar td {
   padding: 8px;
   border: 1px solid #ddd;
 }

@@ -15,9 +15,18 @@ var config  = {
     'calendar.js': './client/calendar.js',
     'dayView.js': './client/day-view.js',
     'monthView.js': './client/month-view.js',
-    'calendar.css': './client/calendar.scss'
+    'calendar.css': './client/calendar.scss',
+    'jquery.js': './client/vendor/jquery.js',
+    'underscore.js': './client/vendor/underscore.js',
+    'backbone.js':   './client/vendor/backbone.js'
   },
   devtool: 'inline-source-map',
+  resolve: {
+    modules: [
+      path.join(__dirname, "/client/vendor"),
+      "node_modules"
+    ]
+  },
   output: {
     filename: '[name]',
     path: __dirname + '/build'

@@ -14,8 +14,32 @@
     integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
     crossorigin="anonymous">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="build/backbone.js"></script>
     <script src="build/date.js"></script>
     <script src="build/calendar.js"></script>
+    <script type="text/foobar"  id="table-template">
+      <table>
+        <tr><% _.each(days, function(day) { %>
+           <th class=""><%- day %>   </th>
+           <% }) %></tr><% _.each(hours, function(hour) { %>
+        <tr>
+          <td><%- hour %>  </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+           <% }) %>
+      </table>
+    </script>
+
+
+    <div id="calendar">
+    </div>
+
     <div id="dialog" style="display:none;" title="Dialog Title">
       <form method="post">
         <section>
