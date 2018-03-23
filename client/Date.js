@@ -48,7 +48,7 @@ function getHour(date) {
 }
 
 function getTheFirstDateInTheMonth(date) {
-  dateInDateTime = convertEpochToDateTime(date);
+  var dateInDateTime = convertEpochToDateTime(date);
   return new Date(dateInDateTime.getFullYear(), dateInDateTime.getMonth() + 1, 0).getDate();
 }
 
@@ -74,3 +74,21 @@ function weekCount(year, monthNumber) {
 function getNameOfMonth(year, month, locale) {
   return new Date(year, month, 1).toLocaleString(locale, { month: 'long' });
 }
+
+// Hack hack!! don't do this, but migrate to import/export syntax
+// we only do this because webpack won't allow these to be global
+window.convertEpochToDateTime =  convertEpochToDateTime;
+window.getNameOfMonth = getNameOfMonth;
+window.convertDateTimeToEpoch =  convertDateTimeToEpoch;
+window.getSundayOfCurrentWeek = getSundayOfCurrentWeek;
+window.getSaturdayOfCurrentWeek = getSaturdayOfCurrentWeek;
+window.getSundayOfPreviousWeek = getSundayOfPreviousWeek;
+window.getSaturdayOfPreviousWeek = getSaturdayOfPreviousWeek;
+window.getSundayOfNextWeek = getSundayOfNextWeek;
+window.getSaturdayOfNextWeek = getSaturdayOfNextWeek;
+window.getSelectedDateInCurrentWeek = getSelectedDateInCurrentWeek;
+window.getDayOfWeekInShortStringFormat = getDayOfWeekInShortStringFormat;
+window.getDayOfWeek = getDayOfWeek;
+window.getHour = getHour;
+window.getTheFirstDateInTheMonth = getTheFirstDateInTheMonth;
+window.getTheLastDateOfMonth = getTheLastDateOfMonth;

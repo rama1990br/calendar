@@ -114,7 +114,7 @@ http.createServer(function processRequest(request, response) {
     query = require('url').parse(request.url, true).query;
     db.data.retrieveWeeklyEvent(con, query, dbCallbackWeeklyRetrieveEvent);
   } else if (request.url !== '/deleteAppointment' && request.url !== '/editAppointment') {
-    fs.readFile('../' + filePath.split('?')[0], function readContents(error, content) {
+    fs.readFile('../' + filePath.split('?')[0].slice(1), function readContents(error, content) {
       if (error) {
         throw error;
       } else {
@@ -124,5 +124,3 @@ http.createServer(function processRequest(request, response) {
     });
   }
 }).listen(3000);
-
-
