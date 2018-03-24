@@ -22,9 +22,9 @@
     }).appendTo('.month-view');
   }
 
-  function createCell(i, j, classForOpacity) {
+  function createCell(i, j, classForTransparency) {
     $('<div/>', {
-      class: 'cell ' + classForOpacity,
+      class: 'cell ' + classForTransparency,
       attr: ({'data-cell-number': j}),
       role: 'cell',
     }).appendTo($('div').find("[data-row-number='" + i + "']"));
@@ -48,7 +48,7 @@
       currentDate = firstSundayOfMonth,
       i,
       j,
-      classForOpacity = '';
+      classForTransparency = '';
     if ($('.month-view').children().length !== 0) {
       $('.month-view').children().remove();
     }
@@ -63,12 +63,12 @@
           currentDate = 1;
         }
         if ((i === 0 && currentDate >= 20) || (i === numOfWeeksInMonth - 1 && currentDate <= 7)) {
-          classForOpacity = 'classForOpacity';
+          classForTransparency = 'transparency';
         }
-        createCell(i, j, classForOpacity);
+        createCell(i, j, classForTransparency);
         fillDates(i, j, currentDate, month, year);
         currentDate++;
-        classForOpacity = '';
+        classForTransparency = '';
       }
     }
   }

@@ -272,7 +272,7 @@
       lastDateOfPreviousMonth = getTheLastDateOfMonth(previousMonth, previousMonthsYear),
       i,
       j,
-      classForOpacity = '';
+      classForTransparency = '';
     if ($('.day-view').children().length !== 0) {
       $('.day-view').children().remove();
     }
